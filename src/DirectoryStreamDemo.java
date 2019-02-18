@@ -3,6 +3,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 /**
  * This class demonstrates how to use a {@link DirectoryStream} to create a
@@ -14,7 +15,9 @@ import java.nio.file.Paths;
  * @see java.nio.file.DirectoryStream
  */
 public class DirectoryStreamDemo {
-
+	
+	public static ArrayList<Path> txtlist;
+	
 	/**
 	 * Outputs the name of the file or subdirectory, with proper indentation to help
 	 * indicate the hierarchy. If a subdirectory is encountered, will recursively
@@ -30,7 +33,7 @@ public class DirectoryStreamDemo {
 	 * @throws IOException
 	 */
 
-	private static void traverse(String prefix, Path path) throws IOException {
+	public static void txttraverse(Path path) throws IOException {
 		/*
 		 * The try-with-resources block makes sure we close the directory stream when
 		 * done, to make sure there aren't any issues later when accessing this
@@ -43,22 +46,25 @@ public class DirectoryStreamDemo {
 		try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
 			// Efficiently iterate through the files and subdirectories.
 			for (Path file : listing) {
-				// Print the name with the proper padding/prefix.
-				System.out.print(prefix + file.getFileName());
+//				// Print the name with the proper padding/prefix.
+//				System.out.print(prefix + file.getFileName());
 
 				// Check if this is a subdirectory
 				if (Files.isDirectory(file)) {
 					// Add a slash so we can tell it is a directory
-					System.out.println("/");
+//					System.out.println("/");
 
 					// Recursively traverse the subdirectory.
 					// Add a little bit of padding so files in subdirectory
 					// are indented under that directory.
-					traverse("  " + prefix, file);
+					txttraverse(file);
 				}
 				else {
 					// Add the file size next to the name
-					System.out.printf(" (%d bytes)%n", Files.size(file));
+//					System.out.printf(" (%d bytes)%n", Files.size(file));
+					if(file.toString().endsWith(".txt") || file.toString().endsWith(".text")) {
+						txtlist.add(file);
+					}
 				}
 			}
 		}
@@ -71,14 +77,33 @@ public class DirectoryStreamDemo {
 	 * @param directory to traverse
 	 * @throws IOException
 	 */
-	public static void traverse(Path directory) throws IOException {
-		if (Files.isDirectory(directory)) {
-			traverse("- ", directory);
+//	public static void traverse(Path directory) throws IOException {
+//		if (Files.isDirectory(directory)) {
+//			privatetraverse(directory);
+//		}
+//		else {
+//			System.out.println(directory.getFileName());
+//		}
+//	}
+	
+	
+	public static void htmltraverse(Path path) throws IOException{
+		try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
+			for (Path file : listing) {
+				if (Files.isDirectory(file)) {
+					htmltraverse(file);
+				}
+				else {
+					if(file.toString().endsWith(".html")) {
+						txtlist.add(file);
+					}
+				}
+			}
 		}
-		else {
-			System.out.println(directory.getFileName());
-		}
+		
 	}
+	
+	
 
 	/**
 	 * Recursively traverses the current directory and prints the file listing.
@@ -89,7 +114,7 @@ public class DirectoryStreamDemo {
 	public static void main(String[] args) throws IOException {
 		Path path = Paths.get(".").toAbsolutePath().normalize();
 		System.out.println(path.getFileName() + ":");
-		traverse(path);
+		htmltraverse(path);
 	}
 
 }
