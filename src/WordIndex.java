@@ -3,16 +3,22 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * A special type of {@link Index} that indexes the locations words were found.
  */
 public class WordIndex implements Index<String>{
 	
-	private HashMap<String, HashSet<Integer>> dictionary;
+	private TreeMap<String, TreeSet<Integer>> dictionary;
 	
 	public WordIndex() {
-		dictionary = new HashMap<>();
+		dictionary = new TreeMap<>();
+	}
+	
+	public TreeMap<String, TreeSet<Integer>> getWordIndex(){
+		return dictionary;
 	}
 
 
@@ -20,7 +26,7 @@ public class WordIndex implements Index<String>{
 	public boolean add(String element, int position) {
 		// TODO Auto-generated method stub
 		if(!dictionary.containsKey(element)) {
-			HashSet<Integer> positionset = new HashSet<>();
+			TreeSet<Integer> positionset = new TreeSet<>();
 			positionset.add(position);
 			dictionary.put(element, positionset);
 					
@@ -34,6 +40,8 @@ public class WordIndex implements Index<String>{
 			return false;
 		}
 	}
+
+	
 
 	@Override
 	public int numPositions(String element) {
@@ -127,6 +135,20 @@ public class WordIndex implements Index<String>{
 			return (Collection<Integer>) e;
 		}
 	}
+	
+//	public TreeMap<String,TreeSet<Integer>> getTreeElements(){
+//		TreeMap<String,TreeSet<Integer>> treeelements = new TreeMap<>();
+////		for(String element : dictionary.keySet()) {
+////			treeelements.put(element, );
+////		}
+////		
+//		return null;
+//	}
+//	
+//	public TreeMap<String,TreeSet<Integer>> getTreePositions(String element){
+//		return null;
+//	}
+//	
 
 	/*
 	 * TODO Modify anything within this class as necessary. This includes the class

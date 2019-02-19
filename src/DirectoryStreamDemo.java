@@ -16,7 +16,12 @@ import java.util.ArrayList;
  */
 public class DirectoryStreamDemo {
 	
-	public static ArrayList<Path> txtlist;
+	private static ArrayList<Path> filelist;
+	
+	
+	public static ArrayList<Path> getList(){
+		return filelist;
+	}
 	
 	/**
 	 * Outputs the name of the file or subdirectory, with proper indentation to help
@@ -63,7 +68,7 @@ public class DirectoryStreamDemo {
 					// Add the file size next to the name
 //					System.out.printf(" (%d bytes)%n", Files.size(file));
 					if(file.toString().endsWith(".txt") || file.toString().endsWith(".text")) {
-						txtlist.add(file);
+						filelist.add(file);
 					}
 				}
 			}
@@ -95,7 +100,7 @@ public class DirectoryStreamDemo {
 				}
 				else {
 					if(file.toString().endsWith(".html")) {
-						txtlist.add(file);
+						filelist.add(file);
 					}
 				}
 			}
