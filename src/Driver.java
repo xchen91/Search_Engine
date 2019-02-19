@@ -32,10 +32,9 @@ public class Driver {
 		// TODO Modify this method as necessary.
 		System.out.println(Arrays.toString(args));
 		
-		
 		Path path, index, locations;
 		ArgumentMap argmap = new ArgumentMap(args);
-//		PrettyJSONWriter jsonwriter = new PrettyJSONWriter();
+
 		WordIndex wordindex = new WordIndex();
 
 		if(argmap.hasFlag("-path")) {
@@ -65,19 +64,19 @@ public class Driver {
 				//add each stem in the wordindex
 				for (String stem : stemset) {
 					int position = 1;
-					wordindex.add(stem, position);
+					wordindex.add(stem, path, position);
 					position++;
 				}
 			}
 			if(index!=null) {
-				PrettyJSONWriter.asNestedObject(wordindex.getWordIndex(), index);
+				PrettyJSONWriter.asNestedTreeMapMap(wordindex.getWordIndex(), index);
 			}
 			
 		}
 		else {
 			index = Paths.get("index.json");
 //			locations = Paths.get("locations.json");
-			PrettyJSONWriter.asNestedObject(wordindex.getWordIndex(), index);	
+			PrettyJSONWriter.asNestedTreeMapMap(wordindex.getWordIndex(), index);	
 			
 		}
 		

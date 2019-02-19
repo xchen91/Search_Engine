@@ -220,6 +220,40 @@ public class PrettyJSONWriter {
 			return null;
 		}
 	}
+	
+	
+	public static void asNestedTreeMapMap(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Writer writer, int level) throws IOException{
+		writer.write("{");
+		writer.write("\n");
+		if(!elements.isEmpty()) {
+			for(String key : elements.headMap(elements.lastKey()).keySet()) {
+				indent(writer, level + 1);
+				quote(key, writer);
+				writer.write(": ");
+				asNestedObject(elements.get(key), writer, level + 1);
+				writer.write(",");
+				writer.write("\n");
+			}
+			indent(writer, level + 1);
+			quote(elements.lastKey(), writer);
+			writer.write(": ");
+			asNestedObject(elements.get(elements.lastKey()), writer, level + 1);
+			writer.write("\n");
+		}
+		indent(writer, level);
+		writer.write("}");
+	}
+	
+	
+	
+	
+	
+	public static void asNestedTreeMapMap(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Path path) throws IOException {
+		// THIS IS PROVIDED FOR YOU; DO NOT MODIFY
+		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+			asNestedTreeMapMap(elements, writer, 0);
+		}
+	}
 
 	/**
 	 * Writes the {@code \t} tab symbol by the number of times specified.
