@@ -12,7 +12,7 @@ import java.util.TreeSet;
  */
 public class WordIndex {
 	
-	private TreeMap <String, TreeMap<String, TreeSet<Integer>>> dictionary;
+	private static TreeMap <String, TreeMap<String, TreeSet<Integer>>> dictionary;
 	
 	public WordIndex() {
 		dictionary = new TreeMap<>();
@@ -40,10 +40,13 @@ public class WordIndex {
 				dictionary.get(element).put(path.toString(), positionset);
 				return true;
 			}
-			else if(!dictionary.get(element).get(path.toString()).contains(position)) {
-				dictionary.get(element).get(path.toString()).add(position);
-				return true;
+			else{
+				if(!dictionary.get(element).get(path.toString()).contains(position)) {
+					dictionary.get(element).get(path.toString()).add(position);
+					return true;
+				}
 			}
+				
 			return false;
 		}
 	}

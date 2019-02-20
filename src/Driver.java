@@ -3,7 +3,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Arrays;
+//import java.util.Arrays;
 import java.util.TreeSet;
 
 /**
@@ -30,57 +30,62 @@ public class Driver {
 		Instant start = Instant.now();
 		
 		// TODO Modify this method as necessary.
-		System.out.println(Arrays.toString(args));
+//		System.out.println(Arrays.toString(args));
 		
-		Path path, index, locations;
+		Path path, index;
 		ArgumentMap argmap = new ArgumentMap(args);
 
-		WordIndex wordindex = new WordIndex();
+		WordIndex invertedindex = new WordIndex();
 
 		if(argmap.hasFlag("-path")) {
 			path = argmap.getPath("-path");
-			//check if it has "-index" or not.
-			if(argmap.hasFlag("-index")) {
-				
-				//traverse all txt file.
-				DirectoryStreamDemo.txttraverse(path);
-				index = argmap.getPath("-index");
-				
-				// if no output path, output to the default path "index.json".
-				if(index == null) {
-					index = argmap.getPath("-index", Paths.get("index.json"));
+			if (path != null) {
+				//check if it has "-index" or not.
+				if(argmap.hasFlag("-index")) {
+					
+					//traverse to all text file.
+					DirectoryStreamDemo.publictxttraverse(path);
+					//get output path
+					index = argmap.getPath("-index");
+
+					// if no output path, output to the default path "index.json".
+					if(index == null) {
+						index = argmap.getPath("-index", Paths.get("index.json"));
+					}
 				}
-			}
-			//if no "-index", traverse all html file.
-			else {
-				DirectoryStreamDemo.htmltraverse(path);
-				index = null;
-			}
-			
-			 //traverse all path in the filelist after DirectoryStreamDemo
-			for (Path file : DirectoryStreamDemo.getList()) {
-				// read the file and parse the file line by line
-				TreeSet<String> stemset = TextFileStemmer.stemFile(file);
-				//add each stem in the wordindex
-				for (String stem : stemset) {
+				//if no "-index", traverse all html file.
+				else {
+					DirectoryStreamDemo.publichtmltraverse(path);
+					index = null;
+				}
+				
+				 //traverse all path in the filelist using DirectoryStreamDemo
+				for (Path file : DirectoryStreamDemo.pathlist) {
+					// read the file and parse the file line by line
+					TreeSet<String> stemset = TextFileStemmer.stemFile(file);
+					//add each stem in the wordindex
 					int position = 1;
-					wordindex.add(stem, path, position);
-					position++;
+					for (String stem : stemset) {
+						invertedindex.add(stem, path, position);
+						position++;
+					}
+				}
+				if(index!=null) {
+					PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getWordIndex(), index);
 				}
 			}
-			if(index!=null) {
-				PrettyJSONWriter.asNestedTreeMapMap(wordindex.getWordIndex(), index);
-			}
+
+			
 			
 		}
 		else {
+			path = null;
 			index = Paths.get("index.json");
 //			locations = Paths.get("locations.json");
-			PrettyJSONWriter.asNestedTreeMapMap(wordindex.getWordIndex(), index);	
+			PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getWordIndex(), index);	
 			
 		}
 		
-
 
 		// calculate time elapsed and output
 		Duration elapsed = Duration.between(start, Instant.now());

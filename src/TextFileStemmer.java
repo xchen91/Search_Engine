@@ -79,14 +79,19 @@ public class TextFileStemmer {
 		try(BufferedReader reader = Files.newBufferedReader(inputFile)){
 			String line;
 			while((line = reader.readLine())!= null) {
-				for (String word : TextParser.parse(line)) {
-					resultset.addAll(stemLine(word));
+//				for (String word : TextParser.parse(line)) {
+//					resultset.addAll(stemLine(word));
+//				}
+				for(String word : stemLine(line)) {
+					resultset.add(word);
 				}
 			}
+			return resultset;
 		}catch(IOException e){
 			e.printStackTrace();
+			return resultset;
 		}
-		return resultset;
+//		return resultset;
 //		throw new UnsupportedOperationException("Not yet implemented.");
 	}
 

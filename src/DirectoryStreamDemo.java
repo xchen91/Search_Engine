@@ -1,8 +1,10 @@
 import java.io.IOException;
+
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+//import java.nio.file.Paths;
 import java.util.ArrayList;
 
 /**
@@ -16,12 +18,8 @@ import java.util.ArrayList;
  */
 public class DirectoryStreamDemo {
 	
-	private static ArrayList<Path> filelist;
-	
-	
-	public static ArrayList<Path> getList(){
-		return filelist;
-	}
+	public static ArrayList<Path> pathlist;
+
 	
 	/**
 	 * Outputs the name of the file or subdirectory, with proper indentation to help
@@ -38,7 +36,7 @@ public class DirectoryStreamDemo {
 	 * @throws IOException
 	 */
 
-	public static void txttraverse(Path path) throws IOException {
+	private static void privatetxttraverse(Path path) throws IOException {
 		/*
 		 * The try-with-resources block makes sure we close the directory stream when
 		 * done, to make sure there aren't any issues later when accessing this
@@ -62,14 +60,16 @@ public class DirectoryStreamDemo {
 					// Recursively traverse the subdirectory.
 					// Add a little bit of padding so files in subdirectory
 					// are indented under that directory.
-					txttraverse(file);
+//					txttraverse(file);
+					privatetxttraverse(file);
 				}
 				else {
 					// Add the file size next to the name
 //					System.out.printf(" (%d bytes)%n", Files.size(file));
-					if(file.toString().endsWith(".txt") || file.toString().endsWith(".text")) {
-						filelist.add(file);
+					if(file.getFileName().toString().endsWith(".txt") || file.getFileName().toString().endsWith(".text")) {
+						pathlist.add(file);
 					}
+					
 				}
 			}
 		}
@@ -82,32 +82,48 @@ public class DirectoryStreamDemo {
 	 * @param directory to traverse
 	 * @throws IOException
 	 */
-//	public static void traverse(Path directory) throws IOException {
-//		if (Files.isDirectory(directory)) {
-//			privatetraverse(directory);
-//		}
-//		else {
-//			System.out.println(directory.getFileName());
-//		}
-//	}
+	public static void publictxttraverse(Path directory) throws IOException {
+		pathlist = new ArrayList<>();
+		if (Files.isDirectory(directory)) {
+			privatetxttraverse(directory);
+		}
+		else {
+			if(directory.getFileName().toString().endsWith(".txt") || directory.getFileName().toString().endsWith(".text")) {
+				pathlist.add(directory);
+			}
+		}
+	}
 	
 	
-	public static void htmltraverse(Path path) throws IOException{
+	private static void privatehtmltraverse(Path path) throws IOException{
 		try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
 			for (Path file : listing) {
 				if (Files.isDirectory(file)) {
-					htmltraverse(file);
+					privatehtmltraverse(file);
 				}
 				else {
 					if(file.toString().endsWith(".html")) {
-						filelist.add(file);
+						pathlist.add(file);
 					}
+
 				}
 			}
 		}
 		
 	}
 	
+	
+	public static void publichtmltraverse(Path directory) throws IOException {
+		pathlist = new ArrayList<>();
+		if (Files.isDirectory(directory)) {
+			privatehtmltraverse(directory);
+		}
+		else {
+			if(directory.toString().endsWith(".html")) {
+				pathlist.add(directory);
+			}
+		}
+	}
 	
 
 	/**
@@ -117,9 +133,13 @@ public class DirectoryStreamDemo {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
+//		DirectoryStreamDemo d1 = new DirectoryStreamDemo();
+		
 		Path path = Paths.get(".").toAbsolutePath().normalize();
 		System.out.println(path.getFileName() + ":");
-		htmltraverse(path);
+		
+		publictxttraverse(path);
+		publichtmltraverse(path);
 	}
 
 }
