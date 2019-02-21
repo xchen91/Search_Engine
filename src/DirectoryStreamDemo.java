@@ -88,7 +88,7 @@ public class DirectoryStreamDemo {
 			privatetxttraverse(directory);
 		}
 		else {
-			if(directory.getFileName().toString().endsWith(".txt") || directory.getFileName().toString().endsWith(".text")) {
+			if(directory.getFileName().toString().toLowerCase().endsWith(".txt") || directory.getFileName().toString().toLowerCase().endsWith(".text")) {
 				pathlist.add(directory);
 			}
 		}
@@ -119,7 +119,7 @@ public class DirectoryStreamDemo {
 			privatehtmltraverse(directory);
 		}
 		else {
-			if(directory.toString().endsWith(".html")) {
+			if(directory.toString().toLowerCase().endsWith(".html")) {
 				pathlist.add(directory);
 			}
 		}

@@ -60,6 +60,8 @@ public class Driver {
 					index = null;
 				}
 				
+				
+				
 				 //traverse all path in the filelist using DirectoryStreamDemo
 				for (Path file : DirectoryStreamDemo.pathlist) {
 					// read the file and parse the file line by line
@@ -73,7 +75,7 @@ public class Driver {
 					}
 				}
 				
-//				System.out.println(invertedindex);
+
 				if(index!=null) {
 					PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getWordIndex(), index);
 				}
@@ -85,7 +87,6 @@ public class Driver {
 		else {
 			path = null;
 			index = Paths.get("index.json");
-//			locations = Paths.get("locations.json");
 			PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getWordIndex(), index);	
 			
 		}
