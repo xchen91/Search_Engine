@@ -66,7 +66,7 @@ public class DirectoryStreamDemo {
 				else {
 					// Add the file size next to the name
 //					System.out.printf(" (%d bytes)%n", Files.size(file));
-					if(file.getFileName().toString().endsWith(".txt") || file.getFileName().toString().endsWith(".text")) {
+					if(file.getFileName().toString().toLowerCase().endsWith(".txt") || file.getFileName().toString().toLowerCase().endsWith(".text")) {
 						pathlist.add(file);
 					}
 					
@@ -102,7 +102,7 @@ public class DirectoryStreamDemo {
 					privatehtmltraverse(file);
 				}
 				else {
-					if(file.toString().endsWith(".html")) {
+					if(file.toString().toLowerCase().endsWith(".html")) {
 						pathlist.add(file);
 					}
 
