@@ -3,8 +3,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 //import java.util.Arrays;
-import java.util.TreeSet;
+//import java.util.TreeSet;
 
 /**
  * Class responsible for running this project based on the provided command-line
@@ -62,14 +63,17 @@ public class Driver {
 				 //traverse all path in the filelist using DirectoryStreamDemo
 				for (Path file : DirectoryStreamDemo.pathlist) {
 					// read the file and parse the file line by line
-					TreeSet<String> stemset = TextFileStemmer.stemFile(file);
+					ArrayList<String> stemlist = TextFileStemmer.stemFile(file);
+//					System.out.println(stemlist);
 					//add each stem in the wordindex
 					int position = 1;
-					for (String stem : stemset) {
+					for (String stem : stemlist) {
 						invertedindex.add(stem, path, position);
 						position++;
 					}
 				}
+				
+//				System.out.println(invertedindex);
 				if(index!=null) {
 					PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getWordIndex(), index);
 				}

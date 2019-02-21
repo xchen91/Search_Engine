@@ -21,6 +21,10 @@ public class WordIndex {
 	public TreeMap<String, TreeMap<String, TreeSet<Integer>>> getWordIndex(){
 		return dictionary;
 	}
+	
+	public String toString() {
+		return dictionary.toString(); 
+	}
 
 	//nested add method
 	public boolean add(String element, Path path, int position) {
@@ -41,13 +45,13 @@ public class WordIndex {
 				return true;
 			}
 			else{
-				if(!dictionary.get(element).get(path.toString()).contains(position)) {
-					dictionary.get(element).get(path.toString()).add(position);
-					return true;
-				}
+//				if(!dictionary.get(element).get(path.toString()).contains(position)) {
+				return dictionary.get(element).get(path.toString()).add(position);
+//					return true;
+//				}
 			}
 				
-			return false;
+			
 		}
 	}
 

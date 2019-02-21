@@ -1,13 +1,18 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Set;
-import java.util.TreeSet;
-import java.io.BufferedReader;
+import java.util.ArrayList;
+//import java.nio.file.Paths;
+//import java.util.Set;
+//import java.util.TreeSet;
 
 import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
+
+import java.io.BufferedReader;
+
+//import opennlp.tools.stemmer.Stemmer;
+//import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
 /**
  * Utility class for parsing and stemming text and text files into sets of
@@ -35,7 +40,7 @@ public class TextFileStemmer {
 	 * @see #DEFAULT
 	 * @see #stemLine(String, Stemmer)
 	 */
-	public static TreeSet<String> stemLine(String line) {
+	public static ArrayList<String> stemLine(String line) {
 		// THIS IS PROVIDED FOR YOU; NO NEED TO MODIFY
 		return stemLine(line, new SnowballStemmer(DEFAULT));
 	}
@@ -50,15 +55,15 @@ public class TextFileStemmer {
 	 * @see Stemmer#stem(CharSequence)
 	 * @see TextParser#parse(String)
 	 */
-	public static TreeSet<String> stemLine(String line, Stemmer stemmer) {
+	public static ArrayList<String> stemLine(String line, Stemmer stemmer) {
 		// TODO Fill in
 		String[] parsedarray = TextParser.parse(line);
-		TreeSet<String> stemset = new TreeSet<>();
+		ArrayList<String> stemlist = new ArrayList<>();
 		for(String parsedstring: parsedarray) {
-			stemset.add((String) stemmer.stem(parsedstring));
+			stemlist.add((String) stemmer.stem(parsedstring));
 		}
 		
-		return stemset;
+		return stemlist;
 //		throw new UnsupportedOperationException("Not yet implemented.");
 	}
 
@@ -73,9 +78,9 @@ public class TextFileStemmer {
 	 * @see #stemLine(String)
 	 * @see TextParser#parse(String)
 	 */
-	public static TreeSet<String> stemFile(Path inputFile) throws IOException {
+	public static ArrayList<String> stemFile(Path inputFile) throws IOException {
 		// TODO Fill in
-		TreeSet<String> resultset = new TreeSet<>();
+		ArrayList<String> resultlist = new ArrayList<>();
 		try(BufferedReader reader = Files.newBufferedReader(inputFile)){
 			String line;
 			while((line = reader.readLine())!= null) {
@@ -83,13 +88,13 @@ public class TextFileStemmer {
 //					resultset.addAll(stemLine(word));
 //				}
 				for(String word : stemLine(line)) {
-					resultset.add(word);
+					resultlist.add(word);
 				}
 			}
-			return resultset;
+			return resultlist;
 		}catch(IOException e){
 			e.printStackTrace();
-			return resultset;
+			return resultlist;
 		}
 //		return resultset;
 //		throw new UnsupportedOperationException("Not yet implemented.");
@@ -111,8 +116,8 @@ public class TextFileStemmer {
 		System.out.println(stemLine(text));
 
 //		Path inputPath = Paths.get("test", "animals.text");
-		Path inputPath = Paths.get("test", "rfc475.txt");
-		Set<String> actual = TextFileStemmer.stemFile(inputPath);
-		System.out.println(actual);
+//		Path inputPath = Paths.get("test", "rfc475.txt");
+//		Set<String> actual = TextFileStemmer.stemFile(inputPath);
+//		System.out.println(actual);
 	}
 }
