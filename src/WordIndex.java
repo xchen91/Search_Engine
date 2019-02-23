@@ -13,13 +13,18 @@ import java.util.TreeSet;
 public class WordIndex {
 	
 	private static TreeMap <String, TreeMap<String, TreeSet<Integer>>> dictionary;
-	
+	private static TreeMap <String, Integer> locationsmap;
 	public WordIndex() {
 		dictionary = new TreeMap<>();
+		locationsmap = new TreeMap<>();
 	}
 	
-	public TreeMap<String, TreeMap<String, TreeSet<Integer>>> getWordIndex(){
+	public TreeMap<String, TreeMap<String, TreeSet<Integer>>> getDictionary(){
 		return dictionary;
+	}
+	
+	public TreeMap<String, Integer> getLocationsMap(){
+		return locationsmap;
 	}
 	
 	public String toString() {
@@ -29,12 +34,17 @@ public class WordIndex {
 	//nested add method
 	public boolean add(String element, Path path, int position) {
 		// TODO Auto-generated method stub
+
+		Integer count = locationsmap.getOrDefault(path.toString(), 0);
+		locationsmap.put(path.toString(), count+1);
 		if(!dictionary.containsKey(element)) {
 			TreeMap<String, TreeSet<Integer>> pathmap = new TreeMap<>();
 			TreeSet<Integer> positionset = new TreeSet<>();
 			positionset.add(position);
 			pathmap.put(path.toString(), positionset);
 			dictionary.put(element, pathmap);
+//			locationsmap.put(path.toString(), count);
+//			count++;
 			return true;
 		}
 		else {
@@ -42,6 +52,9 @@ public class WordIndex {
 				TreeSet<Integer> positionset = new TreeSet<>();
 				positionset.add(position);
 				dictionary.get(element).put(path.toString(), positionset);
+//				locationsmap.put(path.toString(), count);
+//				count++;
+				
 				return true;
 			}
 			else{
@@ -50,10 +63,24 @@ public class WordIndex {
 //					return true;
 //				}
 			}
-				
-			
 		}
+		
 	}
+	
+//	public void addLoication(Path path, int position) {
+//		int count = 1;
+//		if(!locationsmap.containsKey(path.toString())) {
+//			locationsmap.put(path.toString(), count);
+//			count++;
+//		}
+//		else {
+//			int curr = locationsmap.get(path.toString()).intValue();
+//			locationsmap.put(path.toString(), curr+1);
+//		}
+////			locationsmap.get(
+//	
+//		
+//	}
 
 	
 

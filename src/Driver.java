@@ -1,9 +1,11 @@
 import java.io.IOException;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+//import java.util.TreeMap;
 //import java.util.Arrays;
 //import java.util.TreeSet;
 
@@ -37,10 +39,23 @@ public class Driver {
 		ArgumentMap argmap = new ArgumentMap(args);
 
 		WordIndex invertedindex = new WordIndex();
+		
 
 		if(argmap.hasFlag("-path")) {
 			path = argmap.getPath("-path");
 			if (path != null) {
+				//check if it has "-locations" or not
+//				if(argmap.hasFlag("-locations")) {
+//					//traverse to the txt file
+//					DirectoryStreamDemo.publictxttraverse(path);
+//					//get the output path
+//					
+//					locations = argmap.getPath("-locations", Paths.get("locations.json"));
+//
+//				}
+				
+				
+				
 				//check if it has "-index" or not.
 				if(argmap.hasFlag("-index")) {
 					
@@ -60,25 +75,56 @@ public class Driver {
 					index = null;
 				}
 				
+//				if(argmap.hasFlag("-locations")) {
+//					//traverse to the txt file
+//					Path locations = argmap.getPath("-locations", Paths.get("locations.json"));
+//				}
+				
 				
 				
 				 //traverse all path in the filelist using DirectoryStreamDemo
 				for (Path file : DirectoryStreamDemo.pathlist) {
 					// read the file and parse the file line by line
 					ArrayList<String> stemlist = TextFileStemmer.stemFile(file);
-//					System.out.println(stemlist);
+
 					//add each stem in the wordindex
 					int position = 1;
 					for (String stem : stemlist) {
-						invertedindex.add(stem, path, position);
+						invertedindex.add(stem, file, position);
+//						invertedindex.addLoication(file, position);
 						position++;
 					}
 				}
 				
+				if(argmap.hasFlag("-locations")) {
+					//traverse to the txt file
+					Path locations = argmap.getPath("-locations", Paths.get("locations.json"));
+					PrettyJSONWriter.asObject(invertedindex.getLocationsMap(), locations);
+				}
+				
 
 				if(index!=null) {
-					PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getWordIndex(), index);
+					PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getDictionary(), index);
 				}
+				
+//				if(locations != null) {
+//					PrettyJSONWriter.asObject(invertedindex.getLocationsMap(), locations);
+//				}
+				
+				
+				
+				
+//				
+//				for(Path file : DirectoryStreamDemo.pathlist) {
+//					//read the file and parse the file to words
+//					ArrayList<String> stemlist = TextFileStemmer.stemFile(file);
+//					locationmap.put(file.toString(), stemlist.size());
+//				}
+//				if(argmap.hasFlag("-locations")) {
+//					PrettyJSONWriter.asObject(locationmap, locations);
+//				}
+				
+				
 			}
 
 			
@@ -87,7 +133,9 @@ public class Driver {
 		else {
 			path = null;
 			index = Paths.get("index.json");
-			PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getWordIndex(), index);	
+//			locations = Paths.get("locations.json");
+			PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getDictionary(), index);	
+//			PrettyJSONWriter.asObject(invertedindex.getLocationsMap(), locations);
 			
 		}
 		

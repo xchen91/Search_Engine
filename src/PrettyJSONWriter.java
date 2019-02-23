@@ -152,6 +152,7 @@ public class PrettyJSONWriter {
 			return null;
 		}
 	}
+	
 
 	/**
 	 * Writes the elements as a nested pretty JSON object.
