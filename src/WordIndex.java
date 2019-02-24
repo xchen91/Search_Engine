@@ -67,20 +67,6 @@ public class WordIndex {
 		
 	}
 	
-//	public void addLoication(Path path, int position) {
-//		int count = 1;
-//		if(!locationsmap.containsKey(path.toString())) {
-//			locationsmap.put(path.toString(), count);
-//			count++;
-//		}
-//		else {
-//			int curr = locationsmap.get(path.toString()).intValue();
-//			locationsmap.put(path.toString(), curr+1);
-//		}
-////			locationsmap.get(
-//	
-//		
-//	}
 
 	
 

@@ -29,122 +29,80 @@ public class Driver {
 	 */
 	
 	public static void main(String[] args) throws IOException {
-		// store initial start time
-		Instant start = Instant.now();
 		
-		// TODO Modify this method as necessary.
-//		System.out.println(Arrays.toString(args));
-		
-		Path path, index;
-		ArgumentMap argmap = new ArgumentMap(args);
+				// store initial start time
+				Instant start = Instant.now();
+				
+				// TODO Modify this method as necessary.
+				
+				Path path, index;
+				ArgumentMap argmap = new ArgumentMap(args);
+				WordIndex invertedindex = new WordIndex();
+				
 
-		WordIndex invertedindex = new WordIndex();
-		
+				if(argmap.hasFlag("-path")) {
+					path = argmap.getPath("-path");
+					//check valid input path
+					if (path != null) {
+						//check if it has "-index".
+						if(argmap.hasFlag("-index")) {
+							
+							//traverse to all text file.
+							DirectoryStreamDemo.publictxttraverse(path);
+//							// get output path, if no output path, output to the default path "index.json".
+							index = argmap.getPath("-index", Paths.get("index.json"));
+						}
+						//if no "-index", traverse all html file.
+						else {
+							DirectoryStreamDemo.publichtmltraverse(path);
+							index = null;
+						}
+										
+						 //traverse all path in the pathlist using DirectoryStreamDemo
+						for (Path file : DirectoryStreamDemo.pathlist) {
+							// read the file and parse the file word by word
+							ArrayList<String> stemlist = TextFileStemmer.stemFile(file);
 
-		if(argmap.hasFlag("-path")) {
-			path = argmap.getPath("-path");
-			if (path != null) {
-				//check if it has "-locations" or not
-//				if(argmap.hasFlag("-locations")) {
-//					//traverse to the txt file
-//					DirectoryStreamDemo.publictxttraverse(path);
-//					//get the output path
-//					
-//					locations = argmap.getPath("-locations", Paths.get("locations.json"));
-//
-//				}
-				
-				
-				
-				//check if it has "-index" or not.
-				if(argmap.hasFlag("-index")) {
+							//add each word to the invertedindex
+							int position = 1;
+							for (String stem : stemlist) {
+								invertedindex.add(stem, file, position);
+								position++;
+							}
+						}		
+						//if it is txt file, convert it to json format and print the locations/wordcount.
+						if(index!=null) {
+							
+							PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getDictionary(), index);
+						}
+						
+						if(argmap.hasFlag("-locations")) {
+							//get the output path, or output to default path "loca5tions.json".
+							Path locations = argmap.getPath("-locations", Paths.get("locations.json"));
+							PrettyJSONWriter.asObject(invertedindex.getLocationsMap(), locations);
+						}
+						
+						
+					}
 					
-					//traverse to all text file.
-					DirectoryStreamDemo.publictxttraverse(path);
-					//get output path
-					index = argmap.getPath("-index");
-
-					// if no output path, output to the default path "index.json".
-					if(index == null) {
-						index = argmap.getPath("-index", Paths.get("index.json"));
-					}
 				}
-				//if no "-index", traverse all html file.
 				else {
-					DirectoryStreamDemo.publichtmltraverse(path);
-					index = null;
-				}
-				
-//				if(argmap.hasFlag("-locations")) {
-//					//traverse to the txt file
-//					Path locations = argmap.getPath("-locations", Paths.get("locations.json"));
-//				}
-				
-				
-				
-				 //traverse all path in the filelist using DirectoryStreamDemo
-				for (Path file : DirectoryStreamDemo.pathlist) {
-					// read the file and parse the file line by line
-					ArrayList<String> stemlist = TextFileStemmer.stemFile(file);
-
-					//add each stem in the wordindex
-					int position = 1;
-					for (String stem : stemlist) {
-						invertedindex.add(stem, file, position);
-//						invertedindex.addLoication(file, position);
-						position++;
-					}
-				}
-				
-				if(argmap.hasFlag("-locations")) {
-					//traverse to the txt file
-					Path locations = argmap.getPath("-locations", Paths.get("locations.json"));
-					PrettyJSONWriter.asObject(invertedindex.getLocationsMap(), locations);
+					path = null;
+					index = Paths.get("index.json");
+					PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getDictionary(), index);	
+					
 				}
 				
 
-				if(index!=null) {
-					PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getDictionary(), index);
-				}
-				
-//				if(locations != null) {
-//					PrettyJSONWriter.asObject(invertedindex.getLocationsMap(), locations);
-//				}
-				
-				
-				
-				
-//				
-//				for(Path file : DirectoryStreamDemo.pathlist) {
-//					//read the file and parse the file to words
-//					ArrayList<String> stemlist = TextFileStemmer.stemFile(file);
-//					locationmap.put(file.toString(), stemlist.size());
-//				}
-//				if(argmap.hasFlag("-locations")) {
-//					PrettyJSONWriter.asObject(locationmap, locations);
-//				}
-				
-				
-			}
+				// calculate time elapsed and output
+				Duration elapsed = Duration.between(start, Instant.now());
+				double seconds = (double) elapsed.toMillis() / Duration.ofSeconds(1).toMillis();
+				System.out.printf("Elapsed: %f seconds%n", seconds);
 
-			
-			
-		}
-		else {
-			path = null;
-			index = Paths.get("index.json");
-//			locations = Paths.get("locations.json");
-			PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getDictionary(), index);	
-//			PrettyJSONWriter.asObject(invertedindex.getLocationsMap(), locations);
-			
-		}
 		
-
-		// calculate time elapsed and output
-		Duration elapsed = Duration.between(start, Instant.now());
-		double seconds = (double) elapsed.toMillis() / Duration.ofSeconds(1).toMillis();
-		System.out.printf("Elapsed: %f seconds%n", seconds);
 	}
+		
+		
 
 	/*
 	 * Generally, "driver" classes are responsible for setting up and calling other
