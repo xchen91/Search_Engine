@@ -69,17 +69,20 @@ public class WordIndex {
 	}
 	
 	public void count(Path path) throws IOException{
-		DirectoryStreamDemo.publictxttraverse(path);
+//		DirectoryStreamDemo.publictxttraverse(path);
+		System.out.println(locationsmap);
 		for(Path file : DirectoryStreamDemo.pathlist) {
 			int count = 0;
 			for(String word : TextFileStemmer.stemFile(file)) {
 				count++;
 			}
 			if(count!=0) {
+				System.out.println(file.toString());
 				locationsmap.put(file.toString(), count);
 			}
 			
 		}
+		System.out.println(locationsmap);
 	}
 
 	

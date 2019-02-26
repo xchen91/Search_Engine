@@ -1,5 +1,5 @@
 import java.io.IOException;
-import java.nio.file.Files;
+//import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
@@ -54,7 +54,7 @@ public class Driver {
 						}
 						//if no "-index", traverse all html file.
 						else {
-							DirectoryStreamDemo.publichtmltraverse(path);
+							DirectoryStreamDemo.publictxttraverse(path);
 							index = null;
 						}
 										
@@ -65,13 +65,13 @@ public class Driver {
 
 							//add each word to the invertedindex
 							int position = 1;
-							int count = 0;
+//							int count = 0;
 							for (String stem : stemlist) {
-								count++;
+//								count++;
 								invertedindex.add(stem, file, position);
 								position++;
 							}
-							invertedindex.getLocationsMap().put(file.toString(), count);
+//							invertedindex.getLocationsMap().put(file.toString(), count);
 						}		
 						//if it is txt file, convert it to json format and print the locations/wordcount.
 						if(index!=null) {
