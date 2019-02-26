@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.nio.file.Path;
 
 import java.util.ArrayList;
@@ -35,8 +36,8 @@ public class WordIndex {
 	public boolean add(String element, Path path, int position) {
 		// TODO Auto-generated method stub
 
-		Integer count = locationsmap.getOrDefault(path.toString(), 0);
-		locationsmap.put(path.toString(), count+1);
+//		Integer count = locationsmap.getOrDefault(path.toString(), 0);
+//		locationsmap.put(path.toString(), count+1);
 		if(!dictionary.containsKey(element)) {
 			TreeMap<String, TreeSet<Integer>> pathmap = new TreeMap<>();
 			TreeSet<Integer> positionset = new TreeSet<>();
@@ -67,6 +68,19 @@ public class WordIndex {
 		
 	}
 	
+	public void count(Path path) throws IOException{
+		DirectoryStreamDemo.publictxttraverse(path);
+		for(Path file : DirectoryStreamDemo.pathlist) {
+			int count = 0;
+			for(String word : TextFileStemmer.stemFile(file)) {
+				count++;
+			}
+			if(count!=0) {
+				locationsmap.put(file.toString(), count);
+			}
+			
+		}
+	}
 
 	
 
