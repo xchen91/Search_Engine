@@ -58,8 +58,6 @@ public class ArgumentMap {
 				map.put(args[i], null);
 			}
 		}
-		
-//		throw new UnsupportedOperationException("Not yet implemented.");
 	}
 
 	/**
@@ -111,7 +109,6 @@ public class ArgumentMap {
 		else {
 			return true;
 		}
-//		throw new UnsupportedOperationException("Not yet implemented.");
 	}
 
 	/**
@@ -127,9 +124,6 @@ public class ArgumentMap {
 		else {
 			return map.size();
 		}
-			
-		
-//		throw new UnsupportedOperationException("Not yet implemented.");
 	}
 
 	/**
@@ -146,7 +140,6 @@ public class ArgumentMap {
 		else {
 			return false;
 		}
-//		throw new UnsupportedOperationException("Not yet implemented.");
 	}
 
 	/**
@@ -187,7 +180,6 @@ public class ArgumentMap {
 		else {
 			return null;
 		}
-//		throw new UnsupportedOperationException("Not yet implemented.");
 	}
 
 	/**
@@ -228,8 +220,6 @@ public class ArgumentMap {
 		else {
 			return null;
 		}
-		
-//		throw new UnsupportedOperationException("Not yet implemented.");
 	}
 
 	/**

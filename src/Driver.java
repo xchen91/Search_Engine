@@ -5,9 +5,6 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-//import java.util.TreeMap;
-//import java.util.Arrays;
-//import java.util.TreeSet;
 
 /**
  * Class responsible for running this project based on the provided command-line
@@ -33,13 +30,10 @@ public class Driver {
 				// store initial start time
 				Instant start = Instant.now();
 				
-				// TODO Modify this method as necessary.
-				
+				// TODO Modify this method as necessary.				
 				Path path, index;
 				ArgumentMap argmap = new ArgumentMap(args);
 				WordIndex invertedindex = new WordIndex();
-				
-
 				if(argmap.hasFlag("-path")) {
 					path = argmap.getPath("-path");
 					//check valid input path
@@ -49,15 +43,14 @@ public class Driver {
 							
 							//traverse to all text file.
 							DirectoryStreamDemo.publictxttraverse(path);
-//							// get output path, if no output path, output to the default path "index.json".
+							// get output path, if no output path, output to the default path "index.json".
 							index = argmap.getPath("-index", Paths.get("index.json"));
 						}
 						//if no "-index", traverse all html file.
 						else {
 							DirectoryStreamDemo.publictxttraverse(path);
 							index = null;
-						}
-										
+						}				
 						 //traverse all path in the pathlist using DirectoryStreamDemo
 						for (Path file : DirectoryStreamDemo.pathlist) {
 							// read the file and parse the file word by word
@@ -65,13 +58,13 @@ public class Driver {
 
 							//add each word to the invertedindex
 							int position = 1;
-//							int count = 0;
+
 							for (String stem : stemlist) {
-//								count++;
+
 								invertedindex.add(stem, file, position);
 								position++;
 							}
-//							invertedindex.getLocationsMap().put(file.toString(), count);
+
 						}		
 						//if it is txt file, convert it to json format and print the locations/wordcount.
 						if(index!=null) {
@@ -79,32 +72,24 @@ public class Driver {
 							PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getDictionary(), index);
 						}
 						
+						//check if has "-locations", and output the wordcount of each txt file.
 						if(argmap.hasFlag("-locations")) {
 							//get the output path, or output to default path "loca5tions.json".
 							Path locations = argmap.getPath("-locations", Paths.get("locations.json"));
 							invertedindex.count(path);
 							PrettyJSONWriter.asObject(invertedindex.getLocationsMap(), locations);
-
 						}
-						
-						
-					}
-					
+					}	
 				}
 				else {
 					path = null;
 					index = Paths.get("index.json");
 					PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getDictionary(), index);	
-					
 				}
-				
-
 				// calculate time elapsed and output
 				Duration elapsed = Duration.between(start, Instant.now());
 				double seconds = (double) elapsed.toMillis() / Duration.ofSeconds(1).toMillis();
 				System.out.printf("Elapsed: %f seconds%n", seconds);
-
-		
 	}
 		
 		

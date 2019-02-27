@@ -62,9 +62,7 @@ public class TextFileStemmer {
 		for(String parsedstring: parsedarray) {
 			stemlist.add((String) stemmer.stem(parsedstring));
 		}
-		
 		return stemlist;
-//		throw new UnsupportedOperationException("Not yet implemented.");
 	}
 
 	/**
@@ -84,9 +82,6 @@ public class TextFileStemmer {
 		try(BufferedReader reader = Files.newBufferedReader(inputFile)){
 			String line;
 			while((line = reader.readLine())!= null) {
-//				for (String word : TextParser.parse(line)) {
-//					resultset.addAll(stemLine(word));
-//				}
 				for(String word : stemLine(line)) {
 					resultlist.add(word);
 				}
@@ -96,8 +91,6 @@ public class TextFileStemmer {
 			e.printStackTrace();
 			return resultlist;
 		}
-//		return resultset;
-//		throw new UnsupportedOperationException("Not yet implemented.");
 	}
 
 	/**
@@ -114,10 +107,5 @@ public class TextFileStemmer {
 				+ "practisers practises practising practitioner practitioners";
 
 		System.out.println(stemLine(text));
-
-//		Path inputPath = Paths.get("test", "animals.text");
-//		Path inputPath = Paths.get("test", "rfc475.txt");
-//		Set<String> actual = TextFileStemmer.stemFile(inputPath);
-//		System.out.println(actual);
 	}
 }

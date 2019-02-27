@@ -49,23 +49,13 @@ public class DirectoryStreamDemo {
 		try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
 			// Efficiently iterate through the files and subdirectories.
 			for (Path file : listing) {
-//				// Print the name with the proper padding/prefix.
-//				System.out.print(prefix + file.getFileName());
-
 				// Check if this is a subdirectory
 				if (Files.isDirectory(file)) {
-					// Add a slash so we can tell it is a directory
-//					System.out.println("/");
-
 					// Recursively traverse the subdirectory.
-					// Add a little bit of padding so files in subdirectory
-					// are indented under that directory.
-//					txttraverse(file);
 					privatetxttraverse(file);
 				}
 				else {
 					// Add the file size next to the name
-//					System.out.printf(" (%d bytes)%n", Files.size(file));
 					if(file.getFileName().toString().toLowerCase().endsWith(".txt") || file.getFileName().toString().toLowerCase().endsWith(".text")) {
 						pathlist.add(file);
 					}
@@ -133,9 +123,7 @@ public class DirectoryStreamDemo {
 	 * @param args unused
 	 * @throws IOException
 	 */
-	public static void main(String[] args) throws IOException {
-//		DirectoryStreamDemo d1 = new DirectoryStreamDemo();
-		
+	public static void main(String[] args) throws IOException {		
 		Path path = Paths.get(".").toAbsolutePath().normalize();
 		System.out.println(path.getFileName() + ":");
 		
