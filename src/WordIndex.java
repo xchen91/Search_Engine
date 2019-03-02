@@ -1,36 +1,50 @@
 import java.io.IOException;
 import java.nio.file.Path;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
  * A special type of {@link Index} that indexes the locations words were found.
  */
-public class WordIndex {
-	
-	private static TreeMap <String, TreeMap<String, TreeSet<Integer>>> dictionary;
-	private static TreeMap <String, Integer> locationsmap;
+public class WordIndex { // TODO Refactor to InvertedIndex
+
+	/*
+	 * TODO change private static to .... private final
+	 */
+
+	private static TreeMap<String, TreeMap<String, TreeSet<Integer>>> dictionary;
+	private static TreeMap<String, Integer> locationsmap;
+
 	public WordIndex() {
 		dictionary = new TreeMap<>();
 		locationsmap = new TreeMap<>();
 	}
-	
+
+	/*
+	 * TODO getDictionary and getLocationsMap are breaking encapsulation
+	 *
+	 * public void toJSON(Path path) {
+	 * 	PrettyJSONWriter.asNestedTreeMapMap(this.dictionary, path);
+	 * }
+	 */
+
 	public TreeMap<String, TreeMap<String, TreeSet<Integer>>> getDictionary(){
 		return dictionary;
 	}
-	
+
 	public TreeMap<String, Integer> getLocationsMap(){
 		return locationsmap;
 	}
-	
+
+	@Override
 	public String toString() {
-		return dictionary.toString(); 
+		return dictionary.toString();
 	}
+
+	// TODO public boolean add(String element, String location, int position) {
 
 	//nested add method
 	public boolean add(String element, Path path, int position) {
@@ -52,11 +66,19 @@ public class WordIndex {
 			}
 			else{
 				return dictionary.get(element).get(path.toString()).add(position);
+
+				/* TODO
+				if (dictionary.get(element).get(path.toString()).add(position)) {
+					locationsmap.put(file.toString(), locationsmap.getOrDefault(path.toString, 0) + 1);
+				}
+				*/
 			}
 		}
-		
+
 	}
-	
+
+	// TODO Want to always generate the count (important for project 2)
+
 	//count the total words in each file
 	public void count(Path path) throws IOException{
 		for(Path file : DirectoryStreamDemo.pathlist) {
@@ -89,7 +111,7 @@ public class WordIndex {
 		}
 		else {
 			return dictionary.size();
-		}	
+		}
 	}
 
 	public boolean contains(String element) {
@@ -97,8 +119,9 @@ public class WordIndex {
 		return dictionary.containsKey(element);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") // TODO Remove
 
+	// TODO Refactor this to getWords()
 	public Collection<String> getElements() {
 		// TODO Auto-generated method stub
 		try {
@@ -106,12 +129,14 @@ public class WordIndex {
 			for(String element : dictionary.keySet()) {
 				elements.add(element);
 			}
-			Collection<String> immutablelist = Collections.unmodifiableCollection(elements);		
+			Collection<String> immutablelist = Collections.unmodifiableCollection(elements);
 			return immutablelist;
 		}catch(UnsupportedOperationException e) {
 			return (Collection<String>) e;
 		}
-		
+
+
+		// TODO return Collections.unmodifiableCollection(dictionary.keySet());
 	}
 
 
