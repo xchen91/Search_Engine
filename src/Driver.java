@@ -28,9 +28,7 @@ public class Driver {
 	public static void main(String[] args) throws IOException {
 		
 				// store initial start time
-				Instant start = Instant.now();
-				
-				// TODO Modify this method as necessary.				
+				Instant start = Instant.now();			
 				Path path, index;
 				ArgumentMap argmap = new ArgumentMap(args);
 				WordIndex invertedindex = new WordIndex();
@@ -58,13 +56,11 @@ public class Driver {
 
 							//add each word to the invertedindex
 							int position = 1;
-
+							
 							for (String stem : stemlist) {
-
 								invertedindex.add(stem, file, position);
 								position++;
 							}
-
 						}		
 						//if it is txt file, convert it to json format and print the locations/wordcount.
 						if(index!=null) {

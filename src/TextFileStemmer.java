@@ -56,7 +56,6 @@ public class TextFileStemmer {
 	 * @see TextParser#parse(String)
 	 */
 	public static ArrayList<String> stemLine(String line, Stemmer stemmer) {
-		// TODO Fill in
 		String[] parsedarray = TextParser.parse(line);
 		ArrayList<String> stemlist = new ArrayList<>();
 		for(String parsedstring: parsedarray) {
@@ -77,7 +76,6 @@ public class TextFileStemmer {
 	 * @see TextParser#parse(String)
 	 */
 	public static ArrayList<String> stemFile(Path inputFile) throws IOException {
-		// TODO Fill in
 		ArrayList<String> resultlist = new ArrayList<>();
 		try(BufferedReader reader = Files.newBufferedReader(inputFile)){
 			String line;
@@ -100,7 +98,6 @@ public class TextFileStemmer {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		// TODO Modify (or remove) this method as necessary to debug.
 
 		String text = "practic practical practice practiced practicer practices "
 				+ "practicing practis practisants practise practised practiser "

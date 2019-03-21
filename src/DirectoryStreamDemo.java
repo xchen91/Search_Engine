@@ -18,6 +18,9 @@ import java.util.ArrayList;
  */
 public class DirectoryStreamDemo {
 	
+	/**
+	 * 
+	 */
 	public static ArrayList<Path> pathlist;
 
 	
@@ -103,6 +106,10 @@ public class DirectoryStreamDemo {
 	}
 	
 	
+	/**
+	 * @param directory
+	 * @throws IOException
+	 */
 	public static void publichtmltraverse(Path directory) throws IOException {
 		pathlist = new ArrayList<>();
 		if (Files.isDirectory(directory)) {

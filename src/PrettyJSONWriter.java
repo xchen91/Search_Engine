@@ -30,7 +30,6 @@ public class PrettyJSONWriter {
 	 * @throws IOException
 	 */
 	public static void asArray(TreeSet<Integer> elements, Writer writer, int level) throws IOException {
-		// TODO FILL IN. You may modify everything INSIDE this method as needed!
 		writer.write("[");
 		writer.write("\n");
 		if(!elements.isEmpty()) {
@@ -94,7 +93,6 @@ public class PrettyJSONWriter {
 	 * @throws IOException
 	 */
 	public static void asObject(TreeMap<String, Integer> elements, Writer writer, int level) throws IOException {
-		// TODO FILL IN. You may modify everything INSIDE this method as needed!
 		writer.write("{");
 		writer.write("\n");
 		if(!elements.isEmpty()) {
@@ -163,7 +161,6 @@ public class PrettyJSONWriter {
 	 * @throws IOException
 	 */
 	public static void asNestedObject(TreeMap<String, TreeSet<Integer>> elements, Writer writer, int level) throws IOException {
-		// TODO FILL IN. You may modify everything INSIDE this method as needed!
 		writer.write("{");
 		writer.write("\n");
 		if(!elements.isEmpty()) {
@@ -223,6 +220,12 @@ public class PrettyJSONWriter {
 	}
 	
 	
+	/**
+	 * @param elements
+	 * @param writer
+	 * @param level
+	 * @throws IOException
+	 */
 	public static void asNestedTreeMapMap(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Writer writer, int level) throws IOException{
 		writer.write("{");
 		writer.write("\n");
@@ -247,8 +250,11 @@ public class PrettyJSONWriter {
 	
 	
 	
-	
-	
+		/**
+	 * @param elements
+	 * @param path
+	 * @throws IOException
+	 */
 	public static void asNestedTreeMapMap(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Path path) throws IOException {
 		// THIS IS PROVIDED FOR YOU; DO NOT MODIFY
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {

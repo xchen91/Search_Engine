@@ -20,7 +20,6 @@ public class ArgumentMap {
 	 * Initializes this argument map.
 	 */
 	public ArgumentMap() {
-		// TODO Properly initialize map below
 		this.map = new HashMap<>();
 	}
 
@@ -44,7 +43,6 @@ public class ArgumentMap {
 	 * @param args the command line arguments to parse
 	 */
 	public void parse(String[] args) {
-		// TODO Fill in (modify as necessary)
 		for(int i = 0; i < args.length; i++) {
 			if(isFlag(args[i]) && !hasFlag(args[i])) {
 				if(args.length > i+1 && isValue(args[i+1])) {
@@ -74,7 +72,6 @@ public class ArgumentMap {
 	 * @see String#length()
 	 */
 	public static boolean isFlag(String arg) {
-		// TODO Fill in (modify as necessary)
 		if(arg==null) {
 			return false;
 		}
@@ -85,7 +82,6 @@ public class ArgumentMap {
 		else {
 			return false;
 		}
-//		throw new UnsupportedOperationException("Not yet implemented.");
 	}
 
 	/**
@@ -102,7 +98,6 @@ public class ArgumentMap {
 	 * @see String#length()
 	 */
 	public static boolean isValue(String arg) {
-		// TODO Fill in (modify as necessary)
 		if(arg==null|| arg.startsWith("-") || arg.trim().length()<1 ) {
 			return false;
 		}
@@ -117,7 +112,6 @@ public class ArgumentMap {
 	 * @return number of unique flags
 	 */
 	public int numFlags() {
-		// TODO Fill in (modify as necessary)
 		if(map.keySet() == null) {
 			return 0;
 		}
@@ -133,7 +127,6 @@ public class ArgumentMap {
 	 * @return {@code true} if the flag exists
 	 */
 	public boolean hasFlag(String flag) {
-		// TODO Fill in (modify as necessary)
 		if(map.containsKey(flag)) {
 			return true;
 		}
@@ -149,7 +142,6 @@ public class ArgumentMap {
 	 * @return {@code true} if the flag is mapped to a non-null value
 	 */
 	public boolean hasValue(String flag) {
-		// TODO Fill in (modify as necessary)
 		if(map.containsKey(flag)) {
 			if(map.get(flag)==null) {
 				return false;
@@ -161,7 +153,6 @@ public class ArgumentMap {
 		else {
 			return false;
 		}
-//		throw new UnsupportedOperationException("Not yet implemented.");
 	}
 
 	/**
@@ -173,7 +164,6 @@ public class ArgumentMap {
 	 *         there is no mapping for the flag
 	 */
 	public String getString(String flag) {
-	// TODO Fill in (modify as necessary)
 		if(map.containsKey(flag)){
 			return map.get(flag);
 		}
@@ -213,7 +203,6 @@ public class ArgumentMap {
 	 * @see Paths#get(String, String...)
 	 */
 	public Path getPath(String flag) {
-		// TODO Fill in (modify as necessary)
 		if(map.get(flag) != null) {
 			return Paths.get(map.get(flag));
 		}

@@ -15,15 +15,24 @@ public class WordIndex {
 	
 	private static TreeMap <String, TreeMap<String, TreeSet<Integer>>> dictionary;
 	private static TreeMap <String, Integer> locationsmap;
+	/**
+	 * 
+	 */
 	public WordIndex() {
 		dictionary = new TreeMap<>();
 		locationsmap = new TreeMap<>();
 	}
 	
+	/**
+	 * @return a TreeMap of dictionary
+	 */
 	public TreeMap<String, TreeMap<String, TreeSet<Integer>>> getDictionary(){
 		return dictionary;
 	}
 	
+	/**
+	 * @return a TreeMap of locations
+	 */
 	public TreeMap<String, Integer> getLocationsMap(){
 		return locationsmap;
 	}
@@ -33,8 +42,13 @@ public class WordIndex {
 	}
 
 	//nested add method
+	/**
+	 * @param element
+	 * @param path
+	 * @param position
+	 * @return true if changes, false if no changes.
+	 */
 	public boolean add(String element, Path path, int position) {
-		// TODO Auto-generated method stub
 		if(!dictionary.containsKey(element)) {
 			TreeMap<String, TreeSet<Integer>> pathmap = new TreeMap<>();
 			TreeSet<Integer> positionset = new TreeSet<>();
@@ -58,6 +72,10 @@ public class WordIndex {
 	}
 	
 	//count the total words in each file
+	/**
+	 * @param path
+	 * @throws IOException
+	 */
 	public void count(Path path) throws IOException{
 		for(Path file : DirectoryStreamDemo.pathlist) {
 			int count = 0;
@@ -71,8 +89,11 @@ public class WordIndex {
 		}
 	}
 
+	/**
+	 * @param element
+	 * @return number of positions
+	 */
 	public int numPositions(String element) {
-		// TODO Auto-generated method stub
 		if(!dictionary.containsKey(element) || dictionary.get(element)==null) {
 			return 0;
 		}
@@ -82,8 +103,10 @@ public class WordIndex {
 	}
 
 
+	/**
+	 * @return number of elements
+	 */
 	public int numElements() {
-		// TODO Auto-generated method stub
 		if(dictionary.isEmpty()) {
 			return 0;
 		}
@@ -92,15 +115,20 @@ public class WordIndex {
 		}	
 	}
 
+	/**
+	 * @param element
+	 * @return true if dictionary contains element
+	 */
 	public boolean contains(String element) {
-		// TODO Auto-generated method stub
 		return dictionary.containsKey(element);
 	}
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * @return an imutable collection of elements.
+	 */
+//	@SuppressWarnings("unchecked")
 
 	public Collection<String> getElements() {
-		// TODO Auto-generated method stub
 		try {
 			ArrayList<String> elements = new ArrayList<>();
 			for(String element : dictionary.keySet()) {
@@ -113,13 +141,5 @@ public class WordIndex {
 		}
 		
 	}
-
-
-
-
-	/*
-	 * TODO Modify anything within this class as necessary. This includes the class
-	 * declaration; you need to implement the Index interface!
-	 */
 
 }
