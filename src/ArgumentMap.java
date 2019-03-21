@@ -1,7 +1,7 @@
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Parses and stores command-line arguments into simple key = value pairs.
@@ -56,7 +56,20 @@ public class ArgumentMap {
 				map.put(args[i], null);
 			}
 		}
+
+		/* TODO
+		if (isFlag(args[i]) {
+			if (args.length > i + 1 && isValue(args[i + 1])) {
+				map.put(args[i], args[i + 1]);
+			}
+			else {
+				map.put(args[i], null);
+			}
+		}
+		*/
 	}
+
+	// TODO Format all of the files.
 
 	/**
 	 * Determines whether the argument is a flag. Flags start with a dash "-"
@@ -72,16 +85,29 @@ public class ArgumentMap {
 	 * @see String#length()
 	 */
 	public static boolean isFlag(String arg) {
-		if(arg==null) {
+
+//		if(arg==null) {
+
+		// TODO Fill in (modify as necessary)
+		if(arg == null) {
+
 			return false;
 		}
-		
-		else if(arg.trim().length()>1 && arg.trim().startsWith("-")) {
+
+		else if(arg.trim().length() > 1 && arg.trim().startsWith("-")) {
 			return true;
 		}
 		else {
 			return false;
 		}
+		/* TODO
+		arg = arg.trim();
+		return arg.length() > 1 && arg.startsWith("-");
+
+		Try to do this to other methods too.
+		*/
+
+//		throw new UnsupportedOperationException("Not yet implemented.");
 	}
 
 	/**
@@ -116,7 +142,7 @@ public class ArgumentMap {
 			return 0;
 		}
 		else {
-			return map.size();
+			return map.size(); // TODO ONly line you need
 		}
 	}
 
@@ -153,6 +179,13 @@ public class ArgumentMap {
 		else {
 			return false;
 		}
+
+
+
+		// TODO return (map.get(flag) == null);
+
+//		throw new UnsupportedOperationException("Not yet implemented.");
+
 	}
 
 	/**
@@ -165,7 +198,7 @@ public class ArgumentMap {
 	 */
 	public String getString(String flag) {
 		if(map.containsKey(flag)){
-			return map.get(flag);
+			return map.get(flag); // TODO Only line you need
 		}
 		else {
 			return null;

@@ -1,10 +1,15 @@
 import java.io.IOException;
-//import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+
+// TODO Remove old TODO comments
+// TODO Configure Eclipse to see Javadoc warnings for this project
+
+// TODO Can use the "Correct Indentation" feature in Eclipse... also an automatic code formatter
+// TODO Can configure Eclipse to run both of these every time you save
 
 /**
  * Class responsible for running this project based on the provided command-line
@@ -16,19 +21,48 @@ import java.util.ArrayList;
  */
 public class Driver {
 
+	/*
+	 * TODO Driver.main is the only method that can never throw an exception
+	 * in production-ready code. Must catch that exception and output a user-
+	 * friendly informative error message.
+	 */
+
+	/* TODO
+	public static void main(String[] args) {
+		ArgumentMap map = new ArgumentMap(args);
+		InvertedIndex index = new InvertedIndex();
+
+		if (map.hasFlag("-path")) {
+
+		}
+
+		if (map.hasFlag("-index")) {
+
+		}
+
+		if (map.hasFlag("-locations")) {
+
+		}
+	}
+	 */
+
 	/**
 	 * Initializes the classes necessary based on the provided command-line
 	 * arguments. This includes (but is not limited to) how to build or search an
 	 * inverted index.
 	 *
 	 * @param args flag/value pairs used to start this program
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	
 	public static void main(String[] args) throws IOException {
-		
+
 				// store initial start time
-				Instant start = Instant.now();			
+
+
+				Instant start = Instant.now();
+
+				// TODO Modify this method as necessary.
+
 				Path path, index;
 				ArgumentMap argmap = new ArgumentMap(args);
 				WordIndex invertedindex = new WordIndex();
@@ -38,7 +72,7 @@ public class Driver {
 					if (path != null) {
 						//check if it has "-index".
 						if(argmap.hasFlag("-index")) {
-							
+
 							//traverse to all text file.
 							DirectoryStreamDemo.publictxttraverse(path);
 							// get output path, if no output path, output to the default path "index.json".
@@ -48,7 +82,7 @@ public class Driver {
 						else {
 							DirectoryStreamDemo.publictxttraverse(path);
 							index = null;
-						}				
+						}
 						 //traverse all path in the pathlist using DirectoryStreamDemo
 						for (Path file : DirectoryStreamDemo.pathlist) {
 							// read the file and parse the file word by word
@@ -61,13 +95,17 @@ public class Driver {
 								invertedindex.add(stem, file, position);
 								position++;
 							}
+
 						}		
+
+
+
 						//if it is txt file, convert it to json format and print the locations/wordcount.
 						if(index!=null) {
-							
+
 							PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getDictionary(), index);
 						}
-						
+
 						//check if has "-locations", and output the wordcount of each txt file.
 						if(argmap.hasFlag("-locations")) {
 							//get the output path, or output to default path "loca5tions.json".
@@ -75,20 +113,20 @@ public class Driver {
 							invertedindex.count(path);
 							PrettyJSONWriter.asObject(invertedindex.getLocationsMap(), locations);
 						}
-					}	
+					}
 				}
 				else {
 					path = null;
 					index = Paths.get("index.json");
-					PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getDictionary(), index);	
+					PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getDictionary(), index);
 				}
 				// calculate time elapsed and output
 				Duration elapsed = Duration.between(start, Instant.now());
 				double seconds = (double) elapsed.toMillis() / Duration.ofSeconds(1).toMillis();
 				System.out.printf("Elapsed: %f seconds%n", seconds);
 	}
-		
-		
+
+
 
 	/*
 	 * Generally, "driver" classes are responsible for setting up and calling other
