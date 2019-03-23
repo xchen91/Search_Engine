@@ -65,7 +65,7 @@ public class Driver {
 
 				Path path, index;
 				ArgumentMap argmap = new ArgumentMap(args);
-				WordIndex invertedindex = new WordIndex();
+				InvertedIndex invertedindex = new InvertedIndex();
 				if(argmap.hasFlag("-path")) {
 					path = argmap.getPath("-path");
 					//check valid input path

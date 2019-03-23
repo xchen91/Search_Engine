@@ -10,58 +10,49 @@ import java.util.TreeSet;
  * A special type of {@link Index} that indexes the locations words were found.
  */
 
-//public class WordIndex {
-//	
-//	private static TreeMap <String, TreeMap<String, TreeSet<Integer>>> dictionary;
-//	private static TreeMap <String, Integer> locationsmap;
-//	/**
-//	 * 
-//	 */
 
-public class WordIndex { // TODO Refactor to InvertedIndex
+
+public class InvertedIndex {
 
 	/*
 	 * TODO change private static to .... private final
 	 */
 
-	private static TreeMap<String, TreeMap<String, TreeSet<Integer>>> dictionary;
+	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> dictionary;
 	private static TreeMap<String, Integer> locationsmap;
 
 
 	/**
 	 * 
 	 */
-	public WordIndex() {
+	public InvertedIndex() {
 		dictionary = new TreeMap<>();
 		locationsmap = new TreeMap<>();
 	}
 	
 	/**
-	 * @return a TreeMap of dictionary
+	 * @param path 
+	 * @throws IOException 
 	 */
+	 
+	 public void toJSON(Path path) throws IOException {
+		 PrettyJSONWriter.asNestedTreeMapMap(this.dictionary, path);
+	 }
 
 
-	/*
-	 * TODO getDictionary and getLocationsMap are breaking encapsulation
-	 *
-	 * public void toJSON(Path path) {
-	 * 	PrettyJSONWriter.asNestedTreeMapMap(this.dictionary, path);
-	 * }
-	 */
 
-
-	public TreeMap<String, TreeMap<String, TreeSet<Integer>>> getDictionary(){
-		return dictionary;
-	}
+//	public TreeMap<String, TreeMap<String, TreeSet<Integer>>> getDictionary(){
+//		return dictionary;
+//	}
 
 	
 	/**
 	 * @return a TreeMap of locations
 	 */
 
-	public TreeMap<String, Integer> getLocationsMap(){
-		return locationsmap;
-	}
+//	public TreeMap<String, Integer> getLocationsMap(){
+//		return locationsmap;
+//	}
 
 	@Override
 	public String toString() {
@@ -77,7 +68,7 @@ public class WordIndex { // TODO Refactor to InvertedIndex
 	 * @param position
 	 * @return true if changes, false if no changes.
 	 */
-	public boolean add(String element, Path path, int position) {
+	public boolean add(String element, String path, int position) {
 		if(!dictionary.containsKey(element)) {
 			TreeMap<String, TreeSet<Integer>> pathmap = new TreeMap<>();
 			TreeSet<Integer> positionset = new TreeSet<>();
@@ -87,14 +78,14 @@ public class WordIndex { // TODO Refactor to InvertedIndex
 			return true;
 		}
 		else {
-			if(!dictionary.get(element).containsKey(path.toString())) {
+			if(!dictionary.get(element).containsKey(path)) {
 				TreeSet<Integer> positionset = new TreeSet<>();
 				positionset.add(position);
-				dictionary.get(element).put(path.toString(), positionset);
+				dictionary.get(element).put(path, positionset);
 				return true;
 			}
 			else{
-				return dictionary.get(element).get(path.toString()).add(position);
+				return dictionary.get(element).get(path).add(position);
 
 				/* TODO
 				if (dictionary.get(element).get(path.toString()).add(position)) {
