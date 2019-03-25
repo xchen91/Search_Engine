@@ -27,24 +27,43 @@ public class Driver {
 	 * friendly informative error message.
 	 */
 
-	/* TODO
+
 	public static void main(String[] args) {
 		ArgumentMap map = new ArgumentMap(args);
 		InvertedIndex index = new InvertedIndex();
+		
 
-		if (map.hasFlag("-path")) {
-
+		if (map.hasFlag("-path") && map.getPath("-Path") != null) {
+			Path filePath = map.getPath("-path");
+			try {
+				
+			}
+			catch(IOException e) {
+				System.out.println("Unable to build index from path: " + filePath);
+			}
+			
 		}
 
 		if (map.hasFlag("-index")) {
-
+			Path indexPath = map.getPath("-index", Paths.get("index.json"));
+			try {
+				index.toJSON(indexPath);
+			}
+			catch(IOException e) {
+				System.out.println("Unable to print index from path: " + indexPath);
+			}
 		}
 
 		if (map.hasFlag("-locations")) {
-
+			Path locationPath = map.getPath("-locations", Paths.get("locations.json"));
+			try {
+				index.numtoJSON(locationPath);
+			}
+			catch(IOException e) {
+				System.out.println("Unable to print locations from path: " + locationPath);
+			}
 		}
 	}
-	 */
 
 	/**
 	 * Initializes the classes necessary based on the provided command-line
@@ -61,7 +80,7 @@ public class Driver {
 
 				Instant start = Instant.now();
 
-				// TODO Modify this method as necessary.
+
 
 				Path path, index;
 				ArgumentMap argmap = new ArgumentMap(args);
@@ -92,7 +111,7 @@ public class Driver {
 							int position = 1;
 							
 							for (String stem : stemlist) {
-								invertedindex.add(stem, file, position);
+								invertedindex.add(stem, file.toString(), position);
 								position++;
 							}
 
@@ -103,7 +122,7 @@ public class Driver {
 						//if it is txt file, convert it to json format and print the locations/wordcount.
 						if(index!=null) {
 
-							PrettyJSONWriter.asNestedTreeMapMap(invertedindex.getDictionary(), index);
+							PrettyJSONWriter.asNestedTreeMapMap(invertedindex, index);
 						}
 
 						//check if has "-locations", and output the wordcount of each txt file.

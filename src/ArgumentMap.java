@@ -44,32 +44,19 @@ public class ArgumentMap {
 	 */
 	public void parse(String[] args) {
 		for(int i = 0; i < args.length; i++) {
-			if(isFlag(args[i]) && !hasFlag(args[i])) {
-				if(args.length > i+1 && isValue(args[i+1])) {
-					map.put(args[i], args[i+1]);
+			if(isFlag(args[i])){
+				if (args.length > i + 1 && isValue(args[i + 1])) {
+					map.put(args[i], args[i + 1]);
 				}
 				else {
 					map.put(args[i], null);
 				}
 			}
-			else if(hasFlag(args[i])){
-				map.put(args[i], null);
-			}
+
 		}
 
-		/* TODO
-		if (isFlag(args[i]) {
-			if (args.length > i + 1 && isValue(args[i + 1])) {
-				map.put(args[i], args[i + 1]);
-			}
-			else {
-				map.put(args[i], null);
-			}
-		}
-		*/
 	}
 
-	// TODO Format all of the files.
 
 	/**
 	 * Determines whether the argument is a flag. Flags start with a dash "-"
@@ -86,28 +73,9 @@ public class ArgumentMap {
 	 */
 	public static boolean isFlag(String arg) {
 
-//		if(arg==null) {
-
-		// TODO Fill in (modify as necessary)
-		if(arg == null) {
-
-			return false;
-		}
-
-		else if(arg.trim().length() > 1 && arg.trim().startsWith("-")) {
-			return true;
-		}
-		else {
-			return false;
-		}
-		/* TODO
 		arg = arg.trim();
 		return arg.length() > 1 && arg.startsWith("-");
 
-		Try to do this to other methods too.
-		*/
-
-//		throw new UnsupportedOperationException("Not yet implemented.");
 	}
 
 	/**
@@ -124,12 +92,8 @@ public class ArgumentMap {
 	 * @see String#length()
 	 */
 	public static boolean isValue(String arg) {
-		if(arg==null|| arg.startsWith("-") || arg.trim().length()<1 ) {
-			return false;
-		}
-		else {
-			return true;
-		}
+		arg.trim();
+		return !arg.startsWith("-");
 	}
 
 	/**
@@ -138,12 +102,7 @@ public class ArgumentMap {
 	 * @return number of unique flags
 	 */
 	public int numFlags() {
-		if(map.keySet() == null) {
-			return 0;
-		}
-		else {
-			return map.size(); // TODO ONly line you need
-		}
+		return map.size(); 
 	}
 
 	/**
@@ -153,12 +112,7 @@ public class ArgumentMap {
 	 * @return {@code true} if the flag exists
 	 */
 	public boolean hasFlag(String flag) {
-		if(map.containsKey(flag)) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return map.containsKey(flag);
 	}
 
 	/**
@@ -169,23 +123,11 @@ public class ArgumentMap {
 	 */
 	public boolean hasValue(String flag) {
 		if(map.containsKey(flag)) {
-			if(map.get(flag)==null) {
-				return false;
-			}
-			else {
-				return true;
-			}
+			return (map.get(flag) == null);
 		}
 		else {
 			return false;
 		}
-
-
-
-		// TODO return (map.get(flag) == null);
-
-//		throw new UnsupportedOperationException("Not yet implemented.");
-
 	}
 
 	/**
@@ -197,12 +139,7 @@ public class ArgumentMap {
 	 *         there is no mapping for the flag
 	 */
 	public String getString(String flag) {
-		if(map.containsKey(flag)){
-			return map.get(flag); // TODO Only line you need
-		}
-		else {
-			return null;
-		}
+		return map.get(flag); 
 	}
 
 	/**

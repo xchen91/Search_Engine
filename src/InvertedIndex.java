@@ -14,20 +14,18 @@ import java.util.TreeSet;
 
 public class InvertedIndex {
 
-	/*
-	 * TODO change private static to .... private final
-	 */
 
-	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> dictionary;
-	private static TreeMap<String, Integer> locationsmap;
+
+	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
+	private final TreeMap<String, Integer> wordCount;
 
 
 	/**
 	 * 
 	 */
 	public InvertedIndex() {
-		dictionary = new TreeMap<>();
-		locationsmap = new TreeMap<>();
+		index = new TreeMap<>();
+		wordCount = new TreeMap<>();
 	}
 	
 	/**
@@ -36,97 +34,50 @@ public class InvertedIndex {
 	 */
 	 
 	 public void toJSON(Path path) throws IOException {
-		 PrettyJSONWriter.asNestedTreeMapMap(this.dictionary, path);
+		 PrettyJSONWriter.asNestedTreeMapMap(this.index, path);
+	 }
+	 
+	 /**
+	 * @param path
+	 * @throws IOException 
+	 */
+	public void numtoJSON(Path path) throws IOException{
+		 PrettyJSONWriter.asObject(wordCount, path);
 	 }
 
 
 
-//	public TreeMap<String, TreeMap<String, TreeSet<Integer>>> getDictionary(){
-//		return dictionary;
-//	}
-
-	
-	/**
-	 * @return a TreeMap of locations
-	 */
-
-//	public TreeMap<String, Integer> getLocationsMap(){
-//		return locationsmap;
-//	}
-
 	@Override
 	public String toString() {
-		return dictionary.toString();
+		return index.toString();
 	}
 
-	// TODO public boolean add(String element, String location, int position) {
-
+	
 	//nested add method
-	/**
-	 * @param element
-	 * @param path
-	 * @param position
-	 * @return true if changes, false if no changes.
-	 */
-	public boolean add(String element, String path, int position) {
-		if(!dictionary.containsKey(element)) {
-			TreeMap<String, TreeSet<Integer>> pathmap = new TreeMap<>();
-			TreeSet<Integer> positionset = new TreeSet<>();
-			positionset.add(position);
-			pathmap.put(path.toString(), positionset);
-			dictionary.put(element, pathmap);
-			return true;
-		}
-		else {
-			if(!dictionary.get(element).containsKey(path)) {
-				TreeSet<Integer> positionset = new TreeSet<>();
-				positionset.add(position);
-				dictionary.get(element).put(path, positionset);
-				return true;
-			}
-			else{
-				return dictionary.get(element).get(path).add(position);
-
-				/* TODO
-				if (dictionary.get(element).get(path.toString()).add(position)) {
-					locationsmap.put(file.toString(), locationsmap.getOrDefault(path.toString, 0) + 1);
-				}
-				*/
-			}
-		}
-
-	}
-
-	// TODO Want to always generate the count (important for project 2)
-
-	//count the total words in each file
-	/**
-	 * @param path
-	 * @throws IOException
-	 */
-	public void count(Path path) throws IOException{
-		for(Path file : DirectoryStreamDemo.pathlist) {
-			int count = 0;
-			for(String word : TextFileStemmer.stemFile(file)) {
-				count++;
-			}
-			if(count!=0) {
-				System.out.println(file.toString());
-				locationsmap.put(file.toString(), count);
-			}
-		}
-	}
+    /**
+     * @param element
+     * @param location
+     * @param position
+     * @return true if changes, false if no changes.
+     */
+    public boolean add(String element, String location, int position) {
+    	Integer count = wordCount.getOrDefault(location, 0);
+    	wordCount.put(location, count + 1);
+    	index.putIfAbsent(element, new TreeMap<>());
+    	index.get(element).putIfAbsent(location, new TreeSet<>());
+		return index.get(element).get(location).add(position);
+    }
 
 	/**
 	 * @param element
 	 * @return number of positions
 	 */
 	public int numPositions(String element) {
-		if(!dictionary.containsKey(element) || dictionary.get(element)==null) {
+		if(!index.containsKey(element) || index.get(element)==null) {
 			return 0;
 		}
 		else {
-			return dictionary.get(element).size();
+			return index.get(element).size();
 		}
 	}
 
@@ -135,11 +86,11 @@ public class InvertedIndex {
 	 * @return number of elements
 	 */
 	public int numElements() {
-		if(dictionary.isEmpty()) {
+		if(index.isEmpty()) {
 			return 0;
 		}
 		else {
-			return dictionary.size();
+			return index.size();
 		}
 	}
 
@@ -148,32 +99,27 @@ public class InvertedIndex {
 	 * @return true if dictionary contains element
 	 */
 	public boolean contains(String element) {
-		return dictionary.containsKey(element);
+		return index.containsKey(element);
 	}
 
 
 	/**
-	 * @return an imutable collection of elements.
+	 * @return an immutable collection of elements.
 	 */
-//	@SuppressWarnings("unchecked")
 
-	@SuppressWarnings("unchecked") // TODO Remove
-
-	// TODO Refactor this to getWords()
-	public Collection<String> getElements() {
+	public Collection<String> getWords() {
 		try {
 			ArrayList<String> elements = new ArrayList<>();
-			for(String element : dictionary.keySet()) {
+			for(String element : index.keySet()) {
 				elements.add(element);
 			}
 			Collection<String> immutablelist = Collections.unmodifiableCollection(elements);
 			return immutablelist;
 		}catch(UnsupportedOperationException e) {
-			return (Collection<String>) e;
+			return Collections.unmodifiableCollection(index.keySet());
 		}
 
 
-		// TODO return Collections.unmodifiableCollection(dictionary.keySet());
 	}
 
 }
