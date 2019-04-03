@@ -1,10 +1,8 @@
 import java.io.IOException;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
-
 
 /**
  * Class responsible for running this project based on the provided command-line
@@ -15,8 +13,6 @@ import java.time.Instant;
  * @version Spring 2019
  */
 public class Driver {
-
-
 	/**
 	 * Initializes the classes necessary based on the provided command-line
 	 * arguments. This includes (but is not limited to) how to build or search an
@@ -25,7 +21,6 @@ public class Driver {
 	 * @param args flag/value pairs used to start this program
 	 * @throws IOException
 	 */
-
 
 	public static void main(String[] args) {
 		Instant start = Instant.now();
@@ -36,8 +31,7 @@ public class Driver {
 			Path filePath = map.getPath("-path");
 			try {
 				InvertedIndexBuilder.build(filePath, index);
-			}
-			catch(IOException e) {
+			} catch (IOException e) {
 				System.out.println("Unable to build index from path: " + filePath);
 			}
 		}
@@ -46,8 +40,7 @@ public class Driver {
 			Path indexPath = map.getPath("-index", Paths.get("index.json"));
 			try {
 				index.toJSON(indexPath);
-			}
-			catch(IOException e) {
+			} catch (IOException e) {
 				System.out.println("Unable to print index from path: " + indexPath);
 			}
 		}
@@ -56,12 +49,11 @@ public class Driver {
 			Path locationPath = map.getPath("-locations", Paths.get("locations.json"));
 			try {
 				index.numtoJSON(locationPath);
-			}
-			catch(IOException e) {
+			} catch (IOException e) {
 				System.out.println("Unable to print locations from path: " + locationPath);
 			}
 		}
-		
+
 		Duration elapsed = Duration.between(start, Instant.now());
 		double seconds = (double) elapsed.toMillis() / Duration.ofSeconds(1).toMillis();
 		System.out.printf("Elapsed: %f seconds%n", seconds);

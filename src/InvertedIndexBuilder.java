@@ -7,13 +7,12 @@ import java.nio.file.Path;
 import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
-
 /**
- * @author TracyChen
+ * @author tracyair
  *
  */
-public class InvertedIndexBuilder{
-	
+public class InvertedIndexBuilder {
+
 	/**
 	 * @param path
 	 * @param index
@@ -24,8 +23,7 @@ public class InvertedIndexBuilder{
 			InvertedIndexBuilder.singleAdd(file, index);
 		}
 	}
-	
-	
+
 	/**
 	 * @param path
 	 * @param index
@@ -33,19 +31,16 @@ public class InvertedIndexBuilder{
 	 */
 	public static void singleAdd(Path path, InvertedIndex index) throws IOException {
 		int position = 1;
-		try(BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)){
+		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line;
 			Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
-			while((line = reader.readLine())!=null){
-				for(String word : TextParser.parse(line)) {
+			while ((line = reader.readLine()) != null) {
+				for (String word : TextParser.parse(line)) {
 					index.add(stemmer.stem(word).toString(), path.toString(), position);
 					position++;
 				}
 			}
 		}
 	}
-	
-	
-	
-	
+
 }

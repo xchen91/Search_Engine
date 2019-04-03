@@ -1,11 +1,8 @@
 import java.io.IOException;
-
-
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-
 
 /**
  * This class demonstrates how to use a {@link DirectoryStream} to create a
@@ -17,8 +14,7 @@ import java.util.ArrayList;
  * @see java.nio.file.DirectoryStream
  */
 public class DirectoryStreamDemo {
-	
-	
+
 	/**
 	 * Outputs the name of the file or subdirectory, with proper indentation to help
 	 * indicate the hierarchy. If a subdirectory is encountered, will recursively
@@ -35,19 +31,19 @@ public class DirectoryStreamDemo {
 	 */
 
 	private static void privateTraverse(Path path, ArrayList<Path> paths) throws IOException {
-		if(Files.isDirectory(path)) {
-			try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)){
-				for(Path file : listing) {
+		if (Files.isDirectory(path)) {
+			try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
+				for (Path file : listing) {
 					DirectoryStreamDemo.privateTraverse(file, paths);
 				}
 			}
-		}
-		else {
-			if(path.getFileName().toString().toLowerCase().endsWith(".txt")||path.getFileName().toString().toLowerCase().endsWith(".text")) {
+		} else {
+			if (path.getFileName().toString().toLowerCase().endsWith(".txt")
+					|| path.getFileName().toString().toLowerCase().endsWith(".text")) {
 				paths.add(path);
 			}
 		}
-		
+
 	}
 
 	/**
@@ -63,6 +59,5 @@ public class DirectoryStreamDemo {
 		privateTraverse(directory, paths);
 		return paths;
 	}
-	
 
 }

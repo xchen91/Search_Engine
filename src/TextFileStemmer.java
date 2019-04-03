@@ -1,5 +1,5 @@
+import java.io.BufferedReader;
 import java.io.IOException;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -9,9 +9,6 @@ import java.util.ArrayList;
 
 import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
-
-import java.io.BufferedReader;
-
 
 /**
  * Utility class for parsing and stemming text and text files into sets of
@@ -57,7 +54,7 @@ public class TextFileStemmer {
 	public static ArrayList<String> stemLine(String line, Stemmer stemmer) {
 		String[] parsedarray = TextParser.parse(line);
 		ArrayList<String> stemlist = new ArrayList<>();
-		for(String parsedstring: parsedarray) {
+		for (String parsedstring : parsedarray) {
 			stemlist.add(stemmer.stem(parsedstring).toString());
 		}
 		return stemlist;
@@ -67,7 +64,7 @@ public class TextFileStemmer {
 	 * Reads a file line by line, parses each line into cleaned and stemmed words,
 	 * and then adds those words to a set.
 	 *
-	 * @param inputFile  the input file to parse
+	 * @param inputFile the input file to parse
 	 * @return a sorted set of stems from file
 	 * @throws IOException if unable to read or parse file
 	 *
@@ -76,9 +73,9 @@ public class TextFileStemmer {
 	 */
 	public static ArrayList<String> stemFile(Path inputFile) throws IOException {
 		ArrayList<String> resultList = new ArrayList<>();
-		try(BufferedReader reader = Files.newBufferedReader(inputFile)){
+		try (BufferedReader reader = Files.newBufferedReader(inputFile)) {
 			String line;
-			while((line = reader.readLine())!= null) {
+			while ((line = reader.readLine()) != null) {
 				ArrayList<String> stemList = TextFileStemmer.stemLine(line);
 				resultList.addAll(stemList);
 			}
