@@ -29,7 +29,7 @@ public class DirectoryStreamDemo {
 	 *               passed
 	 * @throws IOException
 	 */
-
+	// traverse the text files
 	private static void privateTraverse(Path path, ArrayList<Path> paths) throws IOException {
 		if (Files.isDirectory(path)) {
 			try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
