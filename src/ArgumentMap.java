@@ -53,7 +53,6 @@ public class ArgumentMap {
 			}
 
 		}
-
 	}
 
 	/**
@@ -101,6 +100,7 @@ public class ArgumentMap {
 	 */
 	public int numFlags() {
 		return map.size();
+
 	}
 
 	/**
@@ -120,11 +120,7 @@ public class ArgumentMap {
 	 * @return {@code true} if the flag is mapped to a non-null value
 	 */
 	public boolean hasValue(String flag) {
-		if (map.containsKey(flag)) {
-			return (map.get(flag) == null);
-		} else {
-			return false;
-		}
+		return (map.get(flag) == null);
 	}
 
 	/**

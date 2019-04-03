@@ -14,15 +14,10 @@ import java.time.Instant;
  */
 
 public class Driver {
-	/**
-	 * Initializes the classes necessary based on the provided command-line
-	 * arguments. This includes (but is not limited to) how to build or search an
-	 * inverted index.
-	 *
-	 * @param args flag/value pairs used to start this program
-	 * @throws IOException
-	 */
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Instant start = Instant.now();
 		ArgumentMap map = new ArgumentMap(args);
