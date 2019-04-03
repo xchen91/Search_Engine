@@ -14,11 +14,8 @@ import java.util.TreeSet;
 
 public class InvertedIndex {
 
-
-
 	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
 	private final TreeMap<String, Integer> wordCount;
-
 
 	/**
 	 * 
@@ -27,7 +24,7 @@ public class InvertedIndex {
 		index = new TreeMap<>();
 		wordCount = new TreeMap<>();
 	}
-	
+
 	/**
 	 * @param path 
 	 * @throws IOException 
@@ -42,7 +39,7 @@ public class InvertedIndex {
 	 * @throws IOException 
 	 */
 	public void numtoJSON(Path path) throws IOException{
-		 PrettyJSONWriter.asObject(wordCount, path);
+		 PrettyJSONWriter.asObject(this.wordCount, path);
 	 }
 
 
@@ -73,7 +70,7 @@ public class InvertedIndex {
 	 * @return number of positions
 	 */
 	public int numPositions(String element) {
-		if(!index.containsKey(element) || index.get(element)==null) {
+		if(!index.containsKey(element) || index.get(element) == null) {
 			return 0;
 		}
 		else {
