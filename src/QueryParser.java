@@ -18,4 +18,8 @@ public class QueryParser<SearchResult> {
 		this.map = new TreeMap<>();
 	}
 
+	public void parse() {
+
+	}
+
 }

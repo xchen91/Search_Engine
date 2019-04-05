@@ -20,8 +20,15 @@ public class SearchResult implements Comparable<SearchResult> {
 
 	@Override
 	public int compareTo(SearchResult o) {
-		// TODO Auto-generated method stub
-		return 0;
+		if (this.getScore() == o.getScore()) {
+			if (this.getOccurence() == o.getOccurence()) {
+				return this.getLocation().compareTo(o.getLocation());
+			} else {
+				return Integer.compare(this.getOccurence(), o.getOccurence());
+			}
+		} else {
+			return Double.compare(this.getScore(), o.getScore());
+		}
 	}
 
 	/**
