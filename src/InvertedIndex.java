@@ -3,6 +3,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -92,6 +93,15 @@ public class InvertedIndex {
 	}
 
 	/**
+	 * @param word
+	 * @param location
+	 * @return boolean
+	 */
+	public boolean contains(String word, String location) {
+		return this.index.containsKey(word) && this.index.get(word).containsKey(location);
+	}
+
+	/**
 	 * @return an immutable collection of elements.
 	 */
 
@@ -107,6 +117,70 @@ public class InvertedIndex {
 			return Collections.unmodifiableCollection(index.keySet());
 		}
 
+	}
+
+	/**
+	 * @param word
+	 * @param location
+	 * @return number of positions
+	 */
+	public int count(String word, String location) {
+		if (this.contains(word, location)) {
+			return this.index.get(word).get(location).size();
+		} else {
+			return 0;
+		}
+	}
+
+	/**
+	 * @param queryLine
+	 * @return result
+	 */
+	public ArrayList<SearchResult> exactSearch(TreeSet<String> queryLine) {
+		ArrayList<SearchResult> result = new ArrayList<>();
+		HashMap<String, SearchResult> map = new HashMap<>();
+		for (String word : queryLine) {
+			if (contains(word)) {
+				exactSearch(word, result, map);
+			}
+		}
+		Collections.sort(result);
+		return result;
+	}
+
+	private void exactSearch(String word, ArrayList<SearchResult> result, HashMap<String, SearchResult> map) {
+		for (String location : index.get(word).keySet()) {
+			if (map.containsKey(location)) {
+				map.get(location).updateOccurence(this.count(word, location));
+			} else {
+				SearchResult newResult = new SearchResult(location, this.wordCount.get(location),
+						this.count(word, location));
+				result.add(newResult);
+				map.put(location, newResult);
+			}
+		}
+	}
+
+	/**
+	 * @param queryLine
+	 * @return result
+	 */
+	public ArrayList<SearchResult> partialSearch(TreeSet<String> queryLine) {
+		ArrayList<SearchResult> result = new ArrayList<>();
+		HashMap<String, SearchResult> map = new HashMap<>();
+		for (String word : queryLine) {
+			partialSearch(word, result, map);
+		}
+		Collections.sort(result);
+		return result;
+	}
+
+	private void partialSearch(String word, ArrayList<SearchResult> result, HashMap<String, SearchResult> map) {
+		for (String string : index.keySet()) {
+			if (string.startsWith(word)) {
+				exactSearch(string, result, map);
+			}
+		}
 	}
 
 }

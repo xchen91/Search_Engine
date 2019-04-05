@@ -5,7 +5,7 @@
 public class SearchResult implements Comparable<SearchResult> {
 	private final String location;
 	private final int wordCount;
-	private final int times;
+	private int times;
 
 	/**
 	 * @param location
@@ -57,6 +57,13 @@ public class SearchResult implements Comparable<SearchResult> {
 	 */
 	public double getScore() {
 		return (times / wordCount);
+	}
+
+	/**
+	 * @param newCount
+	 */
+	public void updateOccurence(int newCount) {
+		this.times = this.times + newCount;
 	}
 
 }
