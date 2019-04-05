@@ -50,6 +50,24 @@ public class Driver {
 			}
 		}
 
+		if (map.hasFlag("-query") && map.getPath("-query") != null) {
+			Path queryPath = map.getPath("-query");
+			try {
+
+			} catch (IOException e) {
+				System.out.println("Unable to build the search from path: " + queryPath);
+			}
+		}
+
+		if (map.hasFlag("-results")) {
+			Path resultPath = map.getPath("-results", Paths.get("result.json"));
+			try {
+
+			} catch (IOException e) {
+				System.out.println("Unable to print the search result from path: " + resultPath);
+			}
+		}
+
 		Duration elapsed = Duration.between(start, Instant.now());
 		double seconds = (double) elapsed.toMillis() / Duration.ofSeconds(1).toMillis();
 		System.out.printf("Elapsed: %f seconds%n", seconds);
