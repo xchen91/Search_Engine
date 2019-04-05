@@ -42,6 +42,7 @@ public class QueryParser<SearchResult> {
 					String newString = stemmer.stem(string).toString();
 					querySet.add(newString);
 				}
+
 			}
 		}
 	}
