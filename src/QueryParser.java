@@ -15,6 +15,7 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
  * @param <SearchResult>
  *
  */
+
 public class QueryParser<SearchResult> {
 	private final InvertedIndex index;
 	private final TreeMap<String, ArrayList<SearchResult>> map;
@@ -37,18 +38,29 @@ public class QueryParser<SearchResult> {
 			String line;
 			Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 			while ((line = reader.readLine()) != null) {
-				TreeSet<String> querySet = new TreeSet<>();
+				TreeSet<String> queryLine = new TreeSet<>();
 				for (String string : TextParser.parse(line)) {
 					String newString = stemmer.stem(string).toString();
-					querySet.add(newString);
+					queryLine.add(newString);
 				}
-
+				String joined = String.join(" ", queryLine);
+				if (!queryLine.isEmpty() && !map.containsKey(joined)) {
+					if (exact == true) {
+						map.put(joined, (ArrayList<SearchResult>) index.exactSearch(queryLine));
+					} else {
+						map.put(joined, (ArrayList<SearchResult>) index.partialSearch(queryLine));
+					}
+				}
 			}
 		}
 	}
 
-	public void querytoJSON(Path path) throws IOException {
-
-	}
+	/**
+	 * @param path
+	 * @throws IOException
+	 */
+//	public void querytoJSON(Path path) throws IOException {
+//		PrettyJSONWriter.asNestedSearchResult(map, path);
+//	}
 
 }

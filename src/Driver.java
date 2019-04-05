@@ -22,6 +22,7 @@ public class Driver {
 		Instant start = Instant.now();
 		ArgumentMap map = new ArgumentMap(args);
 		InvertedIndex index = new InvertedIndex();
+		QueryParser query = new QueryParser(index);
 
 		if (map.hasFlag("-path") && map.getPath("-path") != null) {
 			Path filePath = map.getPath("-path");
@@ -53,20 +54,25 @@ public class Driver {
 		if (map.hasFlag("-query") && map.getPath("-query") != null) {
 			Path queryPath = map.getPath("-query");
 			try {
-
+				boolean exact = false;
+				if (map.hasFlag("-exact")) {
+					exact = true;
+				}
+				query.parse(queryPath, exact);
 			} catch (IOException e) {
 				System.out.println("Unable to build the search from path: " + queryPath);
 			}
 		}
 
-		if (map.hasFlag("-results")) {
-			Path resultPath = map.getPath("-results", Paths.get("result.json"));
-			try {
-
-			} catch (IOException e) {
-				System.out.println("Unable to print the search result from path: " + resultPath);
-			}
-		}
+//		if (map.hasFlag("-results")) {
+//			Path resultPath = map.getPath("-results", Paths.get("result.json"));
+//			try {
+//				query.querytoJSON(resultPath);
+//
+//			} catch (IOException e) {
+//				System.out.println("Unable to print the search result from path: " + resultPath);
+//			}
+//		}
 
 		Duration elapsed = Duration.between(start, Instant.now());
 		double seconds = (double) elapsed.toMillis() / Duration.ofSeconds(1).toMillis();

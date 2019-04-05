@@ -266,7 +266,7 @@ public class PrettyJSONWriter {
 	 * @throws IOException
 	 */
 	public static void asNestedLocation(SearchResult location, Writer writer, int level) throws IOException {
-		DecimalFormat FORMATTER = new DecimalFormat("0.000000");
+		DecimalFormat FORMATTER = new DecimalFormat("0.00000000");
 		indent(writer, level + 1);
 		quote("where", writer);
 		writer.write(": ");
@@ -369,6 +369,18 @@ public class PrettyJSONWriter {
 			writer.write("\n");
 		}
 		writer.write("]");
+	}
+
+	/**
+	 * @param map
+	 * @param path
+	 * @throws IOException
+	 */
+	public static void asNestedSearchResult(TreeMap<String, ArrayList<SearchResult>> map, Path path)
+			throws IOException {
+		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+			asNestedSearchResult(map, writer, 0);
+		}
 	}
 
 	/**

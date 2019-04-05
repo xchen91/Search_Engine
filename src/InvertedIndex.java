@@ -1,7 +1,6 @@
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.TreeMap;
@@ -101,22 +100,41 @@ public class InvertedIndex {
 		return this.index.containsKey(word) && this.index.get(word).containsKey(location);
 	}
 
+//	/**
+//	 * @return an immutable collection of elements.
+//	 */
+//
+//	public Collection<String> getWords() {
+//		try {
+//			ArrayList<String> elements = new ArrayList<>();
+//			for (String element : index.keySet()) {
+//				elements.add(element);
+//			}
+//			Collection<String> immutablelist = Collections.unmodifiableCollection(elements);
+//			return immutablelist;
+//		} catch (UnsupportedOperationException e) {
+//			return Collections.unmodifiableCollection(index.keySet());
+//		}
+//
+//	}
+
 	/**
-	 * @return an immutable collection of elements.
+	 * @return number of words
 	 */
+	public int count() {
+		return index.size();
+	}
 
-	public Collection<String> getWords() {
-		try {
-			ArrayList<String> elements = new ArrayList<>();
-			for (String element : index.keySet()) {
-				elements.add(element);
-			}
-			Collection<String> immutablelist = Collections.unmodifiableCollection(elements);
-			return immutablelist;
-		} catch (UnsupportedOperationException e) {
-			return Collections.unmodifiableCollection(index.keySet());
+	/**
+	 * @param word
+	 * @return number of locations
+	 */
+	public int count(String word) {
+		if (index.containsKey(word)) {
+			return index.get(word).size();
+		} else {
+			return 0;
 		}
-
 	}
 
 	/**
