@@ -7,13 +7,13 @@ import java.util.TreeMap;
  *
  */
 public class QueryParser<SearchResult> {
-	private final WordIndex index;
+	private final InvertedIndex index;
 	private final TreeMap<String, ArrayList<SearchResult>> map;
 
 	/**
 	 * @param index
 	 */
-	public QueryParser(WordIndex index) {
+	public QueryParser(InvertedIndex index) {
 		this.index = index;
 		this.map = new TreeMap<>();
 	}
