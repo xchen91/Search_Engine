@@ -56,7 +56,7 @@ public class SearchResult implements Comparable<SearchResult> {
 	 * @return score
 	 */
 	public double getScore() {
-		return (times / wordCount);
+		return ((double) times / wordCount);
 	}
 
 	/**

@@ -12,11 +12,10 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
 /**
  * @author tracyair
- * @param <SearchResult>
  *
  */
 
-public class QueryParser<SearchResult> {
+public class QueryParser {
 	private final InvertedIndex index;
 	private final TreeMap<String, ArrayList<SearchResult>> map;
 
@@ -46,9 +45,9 @@ public class QueryParser<SearchResult> {
 				String joined = String.join(" ", queryLine);
 				if (!queryLine.isEmpty() && !map.containsKey(joined)) {
 					if (exact == true) {
-						map.put(joined, (ArrayList<SearchResult>) index.exactSearch(queryLine));
+						map.put(joined, index.exactSearch(queryLine));
 					} else {
-						map.put(joined, (ArrayList<SearchResult>) index.partialSearch(queryLine));
+						map.put(joined, index.partialSearch(queryLine));
 					}
 				}
 			}
@@ -59,8 +58,8 @@ public class QueryParser<SearchResult> {
 	 * @param path
 	 * @throws IOException
 	 */
-//	public void querytoJSON(Path path) throws IOException {
-//		PrettyJSONWriter.asNestedSearchResult(map, path);
-//	}
+	public void querytoJSON(Path path) throws IOException {
+		PrettyJSONWriter.asNestedSearchResult(map, path);
+	}
 
 }

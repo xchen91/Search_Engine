@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -260,93 +261,78 @@ public class PrettyJSONWriter {
 	}
 
 	/**
-	 * @param location
+	 * @param locations
 	 * @param writer
 	 * @param level
 	 * @throws IOException
 	 */
-	public static void asNestedLocation(SearchResult location, Writer writer, int level) throws IOException {
+	public static void asNestedLocation(SearchResult locations, Writer writer, int level) throws IOException {
 		DecimalFormat FORMATTER = new DecimalFormat("0.00000000");
-		indent(writer, level + 1);
-		quote("where", writer);
-		writer.write(": ");
-		quote(location.getLocation(), writer);
-		writer.write(",");
-		writer.write("\n");
-		indent(writer, level + 1);
-		quote("count", writer);
-		writer.write(": ");
-		Integer occurence = location.getOccurence();
-		writer.write(occurence.toString());
-		writer.write(",");
-		writer.write("\n");
-		indent(writer, level + 1);
-		quote("score", writer);
-		writer.write(": ");
-		writer.write(FORMATTER.format(location.getScore()));
-	}
-
-	/**
-	 * @param elements
-	 * @param writer
-	 * @param level
-	 * @param element
-	 * @throws IOException
-	 */
-	public static void asNestedList(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer, int level,
-			String element) throws IOException {
-		writer.write("[");
-		writer.write("\n");
-		if (!elements.get(element).isEmpty()) {
-			for (SearchResult location : elements.get(element).subList(0, elements.get(element).size() - 1)) {
-				indent(writer, level + 1);
-				writer.write("{");
-				writer.write("\n");
-				asNestedLocation(location, writer, level + 1);
-				writer.write("\n");
-				indent(writer, level + 1);
-				writer.write("}");
-				writer.write(",");
-				writer.write("\n");
-			}
-			indent(writer, level + 1);
-			writer.write("{");
-			writer.write("\n");
-			asNestedLocation(elements.get(element).get(elements.get(element).size() - 1), writer, level + 1);
-			writer.write("\n");
-			indent(writer, level + 1);
-			writer.write("}");
-			writer.write("\n");
-		}
-		indent(writer, level);
-		writer.write("]");
-	}
-
-	/**
-	 * @param elements
-	 * @param writer
-	 * @param level
-	 * @param element
-	 * @throws IOException
-	 */
-	public static void asNestedSingleSearchResult(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer,
-			int level, String element) throws IOException {
 		indent(writer, level);
 		writer.write("{");
-		writer.write("\n");
-		indent(writer, level + 1);
-		quote("queries", writer);
-		writer.write(": ");
-		quote(element, writer);
-		writer.write(",");
-		writer.write("\n");
-		indent(writer, level + 1);
-		quote("results", writer);
-		writer.write(": ");
-		asNestedList(elements, writer, level + 1, element);
+		if (locations != null) {
+			writer.write("\n");
+			indent(writer, level + 1);
+			quote("where", writer);
+			writer.write(": ");
+			quote(locations.getLocation(), writer);
+			writer.write(",");
+			writer.write("\n");
+			indent(writer, level + 1);
+			quote("count", writer);
+			writer.write(": ");
+			Integer occurence = locations.getOccurence();
+			writer.write(occurence.toString());
+			writer.write(",");
+			writer.write("\n");
+			indent(writer, level + 1);
+			quote("score", writer);
+			writer.write(": ");
+			writer.write(FORMATTER.format(locations.getScore()));
+		}
 		writer.write("\n");
 		indent(writer, level);
 		writer.write("}");
+	}
+
+	/**
+	 * @param elements
+	 * @param writer
+	 * @param level
+	 * @param element
+	 * @throws IOException
+	 */
+	public static void asNestedList(ArrayList<SearchResult> elements, Writer writer, int level) throws IOException {
+		if (!elements.isEmpty()) {
+			writer.write("\n");
+			var iterator = elements.iterator();
+			asNestedLocation(iterator.next(), writer, level + 1);
+			while (iterator.hasNext()) {
+				writer.write(",");
+				writer.write("\n");
+				asNestedLocation(iterator.next(), writer, level + 1);
+			}
+		}
+		writer.write("\n");
+		indent(writer, level);
+		writer.write("]");
+
+	}
+
+	/**
+	 * @param query
+	 * @param elements
+	 * @param writer
+	 * @param level
+	 * @throws IOException
+	 */
+	public static void asNestedQuery(String query, ArrayList<SearchResult> elements, Writer writer, int level)
+			throws IOException {
+		indent(writer, level);
+		quote(query, writer);
+		writer.write(": ");
+		writer.write("[");
+		asNestedList(elements, writer, level);
 	}
 
 	/**
@@ -357,29 +343,34 @@ public class PrettyJSONWriter {
 	 */
 	public static void asNestedSearchResult(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer, int level)
 			throws IOException {
-		writer.write("[");
+		indent(writer, level);
+		writer.write("{");
 		writer.write("\n");
 		if (!elements.isEmpty()) {
-			for (String element : elements.headMap(elements.lastKey()).keySet()) {
-				asNestedSingleSearchResult(elements, writer, level + 1, element);
+			Iterator<String> iterator = elements.keySet().iterator();
+			String current = iterator.next();
+			asNestedQuery(current, elements.get(current), writer, level + 1);
+			while (iterator.hasNext()) {
+				current = iterator.next();
 				writer.write(",");
 				writer.write("\n");
+				asNestedQuery(current, elements.get(current), writer, level + 1);
 			}
-			asNestedSingleSearchResult(elements, writer, level + 1, elements.lastKey());
-			writer.write("\n");
 		}
-		writer.write("]");
+		writer.write("\n");
+		indent(writer, level);
+		writer.write("}");
 	}
 
 	/**
-	 * @param map
+	 * @param elements
 	 * @param path
 	 * @throws IOException
 	 */
-	public static void asNestedSearchResult(TreeMap<String, ArrayList<SearchResult>> map, Path path)
+	public static void asNestedSearchResult(TreeMap<String, ArrayList<SearchResult>> elements, Path path)
 			throws IOException {
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
-			asNestedSearchResult(map, writer, 0);
+			asNestedSearchResult(elements, writer, 0);
 		}
 	}
 
