@@ -13,8 +13,10 @@ import java.util.ArrayList;
  * @see java.nio.file.Files
  * @see java.nio.file.DirectoryStream
  */
-public class DirectoryStreamDemo {
+public class DirectoryStreamDemo { // TODO Refactor this to be a better class name (DirectoryTraverser)
 
+	// TODO Need to update documentation
+	
 	/**
 	 * Outputs the name of the file or subdirectory, with proper indentation to help
 	 * indicate the hierarchy. If a subdirectory is encountered, will recursively
@@ -45,6 +47,13 @@ public class DirectoryStreamDemo {
 		}
 
 	}
+	
+	/* TODO
+	public static boolean isTextFile(Path path) {
+		String lower = path.getFileName().toString().toLowerCase();
+		return lower.endsWith(".txt") etc.
+	}
+	*/
 
 	/**
 	 * Safely starts the recursive traversal with the proper padding. Users of this
