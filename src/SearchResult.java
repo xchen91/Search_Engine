@@ -24,10 +24,10 @@ public class SearchResult implements Comparable<SearchResult> {
 			if (this.getOccurence() == o.getOccurence()) {
 				return this.getLocation().compareTo(o.getLocation());
 			} else {
-				return Integer.compare(this.getOccurence(), o.getOccurence());
+				return Integer.compare(o.getOccurence(), this.getOccurence());
 			}
 		} else {
-			return Double.compare(this.getScore(), o.getScore());
+			return Double.compare(o.getScore(), this.getScore());
 		}
 	}
 
