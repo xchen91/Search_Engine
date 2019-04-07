@@ -58,6 +58,16 @@ public class InvertedIndex {
 		index.putIfAbsent(element, new TreeMap<>());
 		index.get(element).putIfAbsent(location, new TreeSet<>());
 		return index.get(element).get(location).add(position);
+		
+		/* TODO
+		index.putIfAbsent(element, new TreeMap<>());
+		index.get(element).putIfAbsent(location, new TreeSet<>());
+		
+		if(index.get(element).get(location).add(position)) {
+			Integer count = wordCount.getOrDefault(location, 0);
+			wordCount.put(location, count + 1);
+		}
+		 */
 	}
 
 	/**
@@ -90,6 +100,14 @@ public class InvertedIndex {
 	public boolean contains(String element) {
 		return index.containsKey(element);
 	}
+	
+	/*
+	 * TODO
+	 * containsLocation(String word, String location)
+	 * containsPosition(String word, String location, int position)
+	 * 
+	 * and contains methods for your wordCount map
+	 */
 
 	/**
 	 * @return an immutable collection of elements.
@@ -108,5 +126,18 @@ public class InvertedIndex {
 		}
 
 	}
-
+	
+	/* TODO
+	public Set<String> getWords() {
+		return Collections.unmodifiableSet(index.keySet());
+	}
+	
+	public Set<String> getLocations(String word) {
+		if (index.containsKey(word)) {
+			return Collections.unmodifiableSet(index.get(word).keySet());
+		}
+		
+		return Collections.emptySet();
+	}
+	*/
 }
