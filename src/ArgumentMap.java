@@ -28,7 +28,7 @@ public class ArgumentMap {
 	 * pairs where possible. Some flags may not have associated values. If a flag is
 	 * repeated, its value is overwritten.
 	 *
-	 * @param args
+	 * @param args the command-line arguments to parse
 	 */
 	public ArgumentMap(String[] args) {
 		// DO NOT MODIFY; THIS METHOD IS PROVIDED FOR YOU
@@ -193,6 +193,9 @@ public class ArgumentMap {
 		return value == null ? defaultValue : value;
 	}
 
+	/**
+	 * Returns a string representation of this index.
+	 */
 	@Override
 	public String toString() {
 		// DO NOT MODIFY; THIS METHOD IS PROVIDED FOR YOU

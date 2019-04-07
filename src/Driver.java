@@ -4,15 +4,6 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 
-/*
-TODO Have to fix warnings:
-Javadoc: Parameter prefix is not declared	DirectoryStreamDemo.java	/Project/src	line 26	Java Problem
-Javadoc: Missing tag for parameter paths	DirectoryStreamDemo.java	/Project/src	line 33	Java Problem
-Javadoc: Missing comment for private declaration	InvertedIndex.java	/Project/src	line 15	Java Problem
-Javadoc: Missing comment for private declaration	InvertedIndex.java	/Project/src	line 16	Java Problem
-Javadoc: Index cannot be resolved to a type	InvertedIndex.java	/Project/src	line 10	Java Problem
- */
-
 /**
  * Class responsible for running this project based on the provided command-line
  * arguments. See the README for details.
@@ -25,8 +16,9 @@ Javadoc: Index cannot be resolved to a type	InvertedIndex.java	/Project/src	line
 public class Driver {
 
 	/**
-	 * TODO description of the method here
-	 * @param args description of the parameter here
+	 * Parses the command-line arguments to build a inverted index data structure
+	 * 
+	 * @param args the command-line arguments to build
 	 */
 	public static void main(String[] args) {
 		Instant start = Instant.now();
@@ -41,9 +33,10 @@ public class Driver {
 				System.out.println("Unable to build index from path: " + filePath);
 			}
 		}
-		/*
-		 * TODO Want to warn the user if they gave a -path flag without a value
-		 */
+
+		if (map.getPath("-path") == null) {
+			System.out.println("The given path is without a value");
+		}
 
 		if (map.hasFlag("-index")) {
 			Path indexPath = map.getPath("-index", Paths.get("index.json"));

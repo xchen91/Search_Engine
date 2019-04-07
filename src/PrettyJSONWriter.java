@@ -32,8 +32,8 @@ public class PrettyJSONWriter {
 	public static void asArray(TreeSet<Integer> elements, Writer writer, int level) throws IOException {
 		writer.write("[");
 		writer.write("\n");
-		if(!elements.isEmpty()) {
-			for(Integer element : elements.headSet(elements.last())) {
+		if (!elements.isEmpty()) {
+			for (Integer element : elements.headSet(elements.last())) {
 				indent(writer, level + 1);
 				writer.write(element.toString());
 				writer.write(",");
@@ -45,7 +45,7 @@ public class PrettyJSONWriter {
 		}
 		indent(writer, level);
 		writer.write("]");
-	
+
 	}
 
 	/**
@@ -78,8 +78,7 @@ public class PrettyJSONWriter {
 			StringWriter writer = new StringWriter();
 			asArray(elements, writer, 0);
 			return writer.toString();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			return null;
 		}
 	}
@@ -95,8 +94,8 @@ public class PrettyJSONWriter {
 	public static void asObject(TreeMap<String, Integer> elements, Writer writer, int level) throws IOException {
 		writer.write("{");
 		writer.write("\n");
-		if(!elements.isEmpty()) {
-			for(String key : elements.headMap(elements.lastKey()).keySet()) {
+		if (!elements.isEmpty()) {
+			for (String key : elements.headMap(elements.lastKey()).keySet()) {
 				indent(writer, level + 1);
 				quote(key, writer);
 				writer.write(": ");
@@ -111,7 +110,6 @@ public class PrettyJSONWriter {
 		}
 		indent(writer, level);
 		writer.write("}");
-		
 
 	}
 
@@ -145,12 +143,10 @@ public class PrettyJSONWriter {
 			StringWriter writer = new StringWriter();
 			asObject(elements, writer, 0);
 			return writer.toString();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			return null;
 		}
 	}
-	
 
 	/**
 	 * Writes the elements as a nested pretty JSON object.
@@ -160,11 +156,12 @@ public class PrettyJSONWriter {
 	 * @param level    the initial indent level
 	 * @throws IOException
 	 */
-	public static void asNestedObject(TreeMap<String, TreeSet<Integer>> elements, Writer writer, int level) throws IOException {
+	public static void asNestedObject(TreeMap<String, TreeSet<Integer>> elements, Writer writer, int level)
+			throws IOException {
 		writer.write("{");
 		writer.write("\n");
-		if(!elements.isEmpty()) {
-			for(String key : elements.headMap(elements.lastKey()).keySet()) {
+		if (!elements.isEmpty()) {
+			for (String key : elements.headMap(elements.lastKey()).keySet()) {
 				indent(writer, level + 1);
 				quote(key, writer);
 				writer.write(": ");
@@ -213,24 +210,26 @@ public class PrettyJSONWriter {
 			StringWriter writer = new StringWriter();
 			asNestedObject(elements, writer, 0);
 			return writer.toString();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			return null;
 		}
 	}
-	
-	
+
 	/**
-	 * @param elements
-	 * @param writer
-	 * @param level
+	 * Writes the sorted map of elements as a pretty JSON object using the provided
+	 * {@link Writer} and indentation level.
+	 * 
+	 * @param elements the elements to convert to JSON
+	 * @param writer   the writer to use
+	 * @param level    the initial indentation level
 	 * @throws IOException
 	 */
-	public static void asNestedTreeMapMap(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Writer writer, int level) throws IOException{
+	public static void asNestedTreeMapMap(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Writer writer,
+			int level) throws IOException {
 		writer.write("{");
 		writer.write("\n");
-		if(!elements.isEmpty()) {
-			for(String key : elements.headMap(elements.lastKey()).keySet()) {
+		if (!elements.isEmpty()) {
+			for (String key : elements.headMap(elements.lastKey()).keySet()) {
 				indent(writer, level + 1);
 				quote(key, writer);
 				writer.write(": ");
@@ -247,15 +246,17 @@ public class PrettyJSONWriter {
 		indent(writer, level);
 		writer.write("}");
 	}
-	
-	
-	
-		/**
-	 * @param elements
-	 * @param path
+
+	/**
+	 * Writes the sorted map of elements as a pretty JSON object to the output index
+	 * file
+	 * 
+	 * @param elements the elements to convert to JSON
+	 * @param path     write a pretty JSON file into this path
 	 * @throws IOException
 	 */
-	public static void asNestedTreeMapMap(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Path path) throws IOException {
+	public static void asNestedTreeMapMap(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Path path)
+			throws IOException {
 		// THIS IS PROVIDED FOR YOU; DO NOT MODIFY
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
 			asNestedTreeMapMap(elements, writer, 0);
@@ -339,11 +340,6 @@ public class PrettyJSONWriter {
 		indent(writer, times);
 		quote(element, writer);
 	}
-
-	/*
-	 * You may add additional methods to this class; just do not modify the
-	 * declaration of the ones already provided!
-	 */
 
 	/**
 	 * A simple main method that demonstrates this class.
