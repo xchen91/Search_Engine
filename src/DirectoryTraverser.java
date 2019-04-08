@@ -16,8 +16,8 @@ public class DirectoryTraverser {
 	 * padding and keep add the text file found in that directory to the list of
 	 * path
 	 *
-	 * @param path to traverse
-	 * @param list of path needed to be added
+	 * @param path  to traverse
+	 * @param paths list of paths needed to be added
 	 * @throws IOException
 	 */
 

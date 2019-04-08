@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
- * A special type of {@link Index} that indexes the locations words were found.
+ * A special type of data structure that indexes the locations words were found.
  */
 
 public class InvertedIndex {
