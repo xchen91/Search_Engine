@@ -34,9 +34,23 @@ public class Driver {
 			}
 		}
 
-		if (map.getPath("-path") == null) {
+		if (map.getPath("-path") == null) { // TODO Happens even if -path flag was not provided!
 			System.out.println("The given path is without a value");
 		}
+		
+		/*
+		 * TODO Try this logic instead.
+		 * 
+		 * if (has -path flag) {
+		 * 		if has -path value {
+		 * 			path = ...
+		 * 			try/catch etc. here
+		 * 		}
+		 * 		else {
+		 * 			output -path given without value
+		 * 		}
+		 * }
+		 */
 
 		if (map.hasFlag("-index")) {
 			Path indexPath = map.getPath("-index", Paths.get("index.json"));

@@ -34,7 +34,7 @@ public class InvertedIndex {
 	 * @throws IOException
 	 */
 
-	public void toJSON(Path path) throws IOException {
+	public void toJSON(Path path) throws IOException { // TODO No blank line between Javadoc and method 
 		PrettyJSONWriter.asNestedTreeMapMap(this.index, path);
 	}
 
@@ -79,7 +79,7 @@ public class InvertedIndex {
 	 * @param element
 	 * @return number of positions
 	 */
-	public int numPositions(String element) {
+	public int numPositions(String element) { // TODO Refactor numLocations, this is not returning the number of positions
 		if (!index.containsKey(element) || index.get(element) == null) {
 			return 0;
 		} else {
@@ -92,13 +92,20 @@ public class InvertedIndex {
 	 * 
 	 * @return number of elements
 	 */
-	public int numElements() {
+	public int numElements() { // TODO Refactor numWords?
 		if (index.isEmpty()) {
 			return 0;
 		} else {
-			return index.size();
+			return index.size(); // TODO This is only line you need for this method.
 		}
 	}
+	
+	/*
+	 * TODO So there should basically be methods for each level in your data
+	 * structures. You have a numElements (should be numWords) for the first level,
+	 * a numPositions (should be numLocations) for the second leve, but nothing
+	 * for the third level in your index. 
+	 */
 
 	/**
 	 * Tests whether the index contains the specified word.
