@@ -7,16 +7,22 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
- * A special type of {@link Index} that indexes the locations words were found.
+ * A special type of data structure that indexes the locations words were found.
  */
 
 public class InvertedIndex {
 
+	/**
+	 * Stores a mapping of words to the positions the words were found.
+	 */
 	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
+	/**
+	 * Stores a mapping of locations and their total words number
+	 */
 	private final TreeMap<String, Integer> wordCount;
 
 	/**
-	 * 
+	 * Initializes the index.
 	 */
 	public InvertedIndex() {
 		index = new TreeMap<>();
@@ -24,7 +30,9 @@ public class InvertedIndex {
 	}
 
 	/**
-	 * @param path
+	 * a method to print the JSON format
+	 * 
+	 * @param path the output file path to print JSON file
 	 * @throws IOException
 	 */
 
@@ -33,7 +41,9 @@ public class InvertedIndex {
 	}
 
 	/**
-	 * @param path
+	 * a method to print the JSON format
+	 * 
+	 * @param path the output file path to print JSON file
 	 * @throws IOException
 	 */
 	public void numtoJSON(Path path) throws IOException {
@@ -45,22 +55,26 @@ public class InvertedIndex {
 		return index.toString();
 	}
 
-	// nested add method
 	/**
-	 * @param element
-	 * @param location
-	 * @param position
-	 * @return true if changes, false if no changes.
+	 * Adds the word and the location, position it was found to the index.
+	 * 
+	 * @param element  word to clean and add to index
+	 * @param location location word was found
+	 * @param position the position the word at
 	 */
-	public boolean add(String element, String location, int position) {
-		Integer count = wordCount.getOrDefault(location, 0);
-		wordCount.put(location, count + 1);
+	public void add(String element, String location, int position) {
 		index.putIfAbsent(element, new TreeMap<>());
 		index.get(element).putIfAbsent(location, new TreeSet<>());
-		return index.get(element).get(location).add(position);
+
+		if (index.get(element).get(location).add(position)) {
+			Integer count = wordCount.getOrDefault(location, 0);
+			wordCount.put(location, count + 1);
+		}
 	}
 
 	/**
+	 * Check the number of positions of given element in the index
+	 * 
 	 * @param element
 	 * @return number of positions
 	 */
@@ -73,6 +87,8 @@ public class InvertedIndex {
 	}
 
 	/**
+	 * Check the number of elements in the index
+	 * 
 	 * @return number of elements
 	 */
 	public int numElements() {
@@ -84,39 +100,25 @@ public class InvertedIndex {
 	}
 
 	/**
+	 * Tests whether the index contains the specified word.
+	 * 
 	 * @param element
-	 * @return true if dictionary contains element
+	 * @return true if index contains element
 	 */
 	public boolean contains(String element) {
 		return index.containsKey(element);
 	}
 
 	/**
-	 * @param word
+	 * Tests whether the index contains the specified word at the specified file.
+	 * 
+	 * @param element
 	 * @param location
-	 * @return boolean
+	 * @return true if the element is in the index at the given location
 	 */
-	public boolean contains(String word, String location) {
-		return this.index.containsKey(word) && this.index.get(word).containsKey(location);
+	public boolean contains(String element, String location) {
+		return this.index.containsKey(element) && this.index.get(element).containsKey(location);
 	}
-
-//	/**
-//	 * @return an immutable collection of elements.
-//	 */
-//
-//	public Collection<String> getWords() {
-//		try {
-//			ArrayList<String> elements = new ArrayList<>();
-//			for (String element : index.keySet()) {
-//				elements.add(element);
-//			}
-//			Collection<String> immutablelist = Collections.unmodifiableCollection(elements);
-//			return immutablelist;
-//		} catch (UnsupportedOperationException e) {
-//			return Collections.unmodifiableCollection(index.keySet());
-//		}
-//
-//	}
 
 	/**
 	 * @return number of words
@@ -166,6 +168,11 @@ public class InvertedIndex {
 		return result;
 	}
 
+	/**
+	 * @param word
+	 * @param result
+	 * @param map
+	 */
 	private void exactSearch(String word, ArrayList<SearchResult> result, HashMap<String, SearchResult> map) {
 		for (String location : index.get(word).keySet()) {
 			if (map.containsKey(location)) {
@@ -193,6 +200,11 @@ public class InvertedIndex {
 		return result;
 	}
 
+	/**
+	 * @param word
+	 * @param result
+	 * @param map
+	 */
 	private void partialSearch(String word, ArrayList<SearchResult> result, HashMap<String, SearchResult> map) {
 		for (String string : index.keySet()) {
 			if (string.startsWith(word)) {

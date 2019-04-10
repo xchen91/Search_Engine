@@ -1,7 +1,7 @@
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Parses and stores command-line arguments into simple key = value pairs.
@@ -20,7 +20,6 @@ public class ArgumentMap {
 	 * Initializes this argument map.
 	 */
 	public ArgumentMap() {
-		// TODO Properly initialize map below
 		this.map = new HashMap<>();
 	}
 
@@ -29,7 +28,7 @@ public class ArgumentMap {
 	 * pairs where possible. Some flags may not have associated values. If a flag is
 	 * repeated, its value is overwritten.
 	 *
-	 * @param args
+	 * @param args the command-line arguments to parse
 	 */
 	public ArgumentMap(String[] args) {
 		// DO NOT MODIFY; THIS METHOD IS PROVIDED FOR YOU
@@ -44,19 +43,15 @@ public class ArgumentMap {
 	 * @param args the command line arguments to parse
 	 */
 	public void parse(String[] args) {
-		// TODO Fill in (modify as necessary)
-		for(int i = 0; i < args.length; i++) {
-			if(isFlag(args[i]) && !hasFlag(args[i])) {
-				if(args.length > i+1 && isValue(args[i+1])) {
-					map.put(args[i], args[i+1]);
-				}
-				else {
+		for (int i = 0; i < args.length; i++) {
+			if (isFlag(args[i])) {
+				if (args.length > i + 1 && isValue(args[i + 1])) {
+					map.put(args[i], args[i + 1]);
+				} else {
 					map.put(args[i], null);
 				}
 			}
-			else if(hasFlag(args[i])){
-				map.put(args[i], null);
-			}
+
 		}
 	}
 
@@ -74,18 +69,10 @@ public class ArgumentMap {
 	 * @see String#length()
 	 */
 	public static boolean isFlag(String arg) {
-		// TODO Fill in (modify as necessary)
-		if(arg==null) {
-			return false;
-		}
-		
-		else if(arg.trim().length()>1 && arg.trim().startsWith("-")) {
-			return true;
-		}
-		else {
-			return false;
-		}
-//		throw new UnsupportedOperationException("Not yet implemented.");
+
+		arg = arg.trim();
+		return arg.length() > 1 && arg.startsWith("-");
+
 	}
 
 	/**
@@ -102,13 +89,8 @@ public class ArgumentMap {
 	 * @see String#length()
 	 */
 	public static boolean isValue(String arg) {
-		// TODO Fill in (modify as necessary)
-		if(arg==null|| arg.startsWith("-") || arg.trim().length()<1 ) {
-			return false;
-		}
-		else {
-			return true;
-		}
+		arg.trim();
+		return !arg.startsWith("-");
 	}
 
 	/**
@@ -117,13 +99,8 @@ public class ArgumentMap {
 	 * @return number of unique flags
 	 */
 	public int numFlags() {
-		// TODO Fill in (modify as necessary)
-		if(map.keySet() == null) {
-			return 0;
-		}
-		else {
-			return map.size();
-		}
+		return map.size();
+
 	}
 
 	/**
@@ -133,13 +110,7 @@ public class ArgumentMap {
 	 * @return {@code true} if the flag exists
 	 */
 	public boolean hasFlag(String flag) {
-		// TODO Fill in (modify as necessary)
-		if(map.containsKey(flag)) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return map.containsKey(flag);
 	}
 
 	/**
@@ -149,19 +120,7 @@ public class ArgumentMap {
 	 * @return {@code true} if the flag is mapped to a non-null value
 	 */
 	public boolean hasValue(String flag) {
-		// TODO Fill in (modify as necessary)
-		if(map.containsKey(flag)) {
-			if(map.get(flag)==null) {
-				return false;
-			}
-			else {
-				return true;
-			}
-		}
-		else {
-			return false;
-		}
-//		throw new UnsupportedOperationException("Not yet implemented.");
+		return (map.get(flag) == null);
 	}
 
 	/**
@@ -173,13 +132,7 @@ public class ArgumentMap {
 	 *         there is no mapping for the flag
 	 */
 	public String getString(String flag) {
-	// TODO Fill in (modify as necessary)
-		if(map.containsKey(flag)){
-			return map.get(flag);
-		}
-		else {
-			return null;
-		}
+		return map.get(flag);
 	}
 
 	/**
@@ -213,11 +166,9 @@ public class ArgumentMap {
 	 * @see Paths#get(String, String...)
 	 */
 	public Path getPath(String flag) {
-		// TODO Fill in (modify as necessary)
-		if(map.get(flag) != null) {
+		if (map.get(flag) != null) {
 			return Paths.get(map.get(flag));
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
@@ -242,6 +193,9 @@ public class ArgumentMap {
 		return value == null ? defaultValue : value;
 	}
 
+	/**
+	 * Returns a string representation of this index.
+	 */
 	@Override
 	public String toString() {
 		// DO NOT MODIFY; THIS METHOD IS PROVIDED FOR YOU

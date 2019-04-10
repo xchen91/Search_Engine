@@ -16,7 +16,9 @@ import java.time.Instant;
 public class Driver {
 
 	/**
-	 * @param args
+	 * Parses the command-line arguments to build a inverted index data structure
+	 * 
+	 * @param args the command-line arguments to build
 	 */
 	public static void main(String[] args) {
 		Instant start = Instant.now();

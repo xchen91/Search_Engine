@@ -11,15 +11,25 @@ import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
 /**
+ * a class that parses the file and stores the search results
+ * 
  * @author tracyair
  *
  */
 
 public class QueryParser {
+	/**
+	 * Stores query line into inverted index data structure
+	 */
 	private final InvertedIndex index;
+	/**
+	 * Stores a mapping of query line and the lists of search result
+	 */
 	private final TreeMap<String, ArrayList<SearchResult>> map;
 
 	/**
+	 * Class constructor
+	 * 
 	 * @param index
 	 */
 	public QueryParser(InvertedIndex index) {
@@ -28,8 +38,12 @@ public class QueryParser {
 	}
 
 	/**
-	 * @param path
-	 * @param exact
+	 * This method first makes the query file into every single query line, and uses
+	 * the exactSearch and patialSearch in InvertedIndex and finally, puts the query
+	 * line and result into result data structure of this class.
+	 * 
+	 * @param path  the path of file that needs to be searched
+	 * @param exact a boolean checking if it is exact search or not
 	 * @throws IOException
 	 */
 	public void parse(Path path, boolean exact) throws IOException {
@@ -55,7 +69,9 @@ public class QueryParser {
 	}
 
 	/**
-	 * @param path
+	 * a method that prints the search result data structure to the JSON file.
+	 * 
+	 * @param path the path of the JSON file output
 	 * @throws IOException
 	 */
 	public void querytoJSON(Path path) throws IOException {
