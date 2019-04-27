@@ -120,6 +120,8 @@ public class InvertedIndex {
 		return this.index.containsKey(element) && this.index.get(element).containsKey(location);
 	}
 
+	// TODO Fix Javadoc comments
+	
 	/**
 	 * @return number of words
 	 */
@@ -151,19 +153,27 @@ public class InvertedIndex {
 			return 0;
 		}
 	}
+	
+	/* TODO
+	public ArrayList<SearchResult> search(Collection<String> queries, boolean exact) {
+		return exact ? exactSearch(queries) : partialSearch(queries); 
+	}
+	*/
 
 	/**
 	 * @param queryLine
 	 * @return result
 	 */
-	public ArrayList<SearchResult> exactSearch(TreeSet<String> queryLine) {
+	public ArrayList<SearchResult> exactSearch(TreeSet<String> queryLine) { // TODO Collection<String> queries
 		ArrayList<SearchResult> result = new ArrayList<>();
 		HashMap<String, SearchResult> map = new HashMap<>();
+		
 		for (String word : queryLine) {
 			if (contains(word)) {
 				exactSearch(word, result, map);
 			}
 		}
+		
 		Collections.sort(result);
 		return result;
 	}
@@ -173,7 +183,7 @@ public class InvertedIndex {
 	 * @param result
 	 * @param map
 	 */
-	private void exactSearch(String word, ArrayList<SearchResult> result, HashMap<String, SearchResult> map) {
+	private void exactSearch(String word, ArrayList<SearchResult> result, HashMap<String, SearchResult> map) { // TODO refactor searchHelper(...)
 		for (String location : index.get(word).keySet()) {
 			if (map.containsKey(location)) {
 				map.get(location).updateOccurence(this.count(word, location));
@@ -190,12 +200,26 @@ public class InvertedIndex {
 	 * @param queryLine
 	 * @return result
 	 */
-	public ArrayList<SearchResult> partialSearch(TreeSet<String> queryLine) {
+	public ArrayList<SearchResult> partialSearch(TreeSet<String> queryLine) { // TODO Collection<String> queries
 		ArrayList<SearchResult> result = new ArrayList<>();
 		HashMap<String, SearchResult> map = new HashMap<>();
+		
 		for (String word : queryLine) {
 			partialSearch(word, result, map);
 		}
+		
+		/* TODO
+		for (String query : queryLine) {
+			for (String word : index.tailMap(query).keySet()) {
+				if starts with
+					searchHelper(...)
+				else
+					break;
+			}
+		}
+		*/
+		
+		
 		Collections.sort(result);
 		return result;
 	}
@@ -205,7 +229,7 @@ public class InvertedIndex {
 	 * @param result
 	 * @param map
 	 */
-	private void partialSearch(String word, ArrayList<SearchResult> result, HashMap<String, SearchResult> map) {
+	private void partialSearch(String word, ArrayList<SearchResult> result, HashMap<String, SearchResult> map) { // TODO Remove
 		for (String string : index.keySet()) {
 			if (string.startsWith(word)) {
 				exactSearch(string, result, map);
