@@ -69,7 +69,6 @@ public class ArgumentMap {
 	 * @see String#length()
 	 */
 	public static boolean isFlag(String arg) {
-
 		arg = arg.trim();
 		return arg.length() > 1 && arg.startsWith("-");
 

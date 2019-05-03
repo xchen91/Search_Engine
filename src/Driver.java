@@ -35,33 +35,18 @@ public class Driver {
 			}
 		}
 
-		if (map.hasFlag("-path") && map.getPath("-path") != null) {
-			Path filePath = map.getPath("-path");
-			try {
-				InvertedIndexBuilder.build(filePath, index);
-			} catch (IOException e) {
-				System.out.println("Unable to build index from path: " + filePath);
+		if (map.hasFlag("-path")) {
+			if (map.getPath("-path") != null) {
+				Path filePath = map.getPath("-path");
+				try {
+					InvertedIndexBuilder.build(filePath, index);
+				} catch (IOException e) {
+					System.out.println("Unable to build index from path: " + filePath);
+				}
+			} else {
+				System.out.println("The given path is without a value");
 			}
 		}
-
-		if (map.getPath("-path") == null) { // TODO Happens even if -path flag was not provided!
-			System.out.println("The given path is without a value");
-		}
-		
-		/*
-		 * TODO Try this logic instead.
-		 * 
-		 * if (has -path flag) {
-		 * 		if has -path value {
-		 * 			path = ...
-		 * 			try/catch etc. here
-		 * 		}
-		 * 		else {
-		 * 			output -path given without value
-		 * 		}
-		 * }
-		 */
-
 
 		if (map.hasFlag("-index")) {
 			Path indexPath = map.getPath("-index", Paths.get("index.json"));
