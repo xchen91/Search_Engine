@@ -43,28 +43,35 @@ public class QueryParser {
 	 * line and result into result data structure of this class.
 	 * 
 	 * @param path  the path of file that needs to be searched
-	 * @param exact a boolean checking if it is exact search or not
+	 * @param exact a boolean checking if it is exact search or partial search
 	 * @throws IOException
 	 */
 	public void parse(Path path, boolean exact) throws IOException {
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line;
-			Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 			while ((line = reader.readLine()) != null) {
-				TreeSet<String> queryLine = new TreeSet<>();
-				for (String string : TextParser.parse(line)) {
-					String newString = stemmer.stem(string).toString();
-					queryLine.add(newString);
-				}
-				String joined = String.join(" ", queryLine);
-				if (!queryLine.isEmpty() && !map.containsKey(joined)) {
-					if (exact == true) {
-						map.put(joined, index.exactSearch(queryLine));
-					} else {
-						map.put(joined, index.partialSearch(queryLine));
-					}
-				}
+				parse(line, exact);
+
 			}
+		}
+	}
+
+	/**
+	 * Parse the line and output the result
+	 * 
+	 * @param line  query lines
+	 * @param exact a boolean checking if it is exact search or not
+	 */
+	public void parse(String line, boolean exact) {
+		Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
+		TreeSet<String> queryLine = new TreeSet<>();
+		for (String string : TextParser.parse(line)) {
+			String newString = stemmer.stem(string).toString();
+			queryLine.add(newString);
+		}
+		String joined = String.join(" ", queryLine);
+		if (!queryLine.isEmpty() && !map.containsKey(joined)) {
+			map.put(joined, index.search(queryLine, exact));
 		}
 	}
 
