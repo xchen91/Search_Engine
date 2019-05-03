@@ -25,7 +25,7 @@ public class InvertedIndexBuilder {
 	 */
 	public static void build(Path path, InvertedIndex index) throws IOException {
 		for (Path file : DirectoryTraverser.publicTraverse(path)) {
-			InvertedIndexBuilder.addFile(file, index);
+			addFile(file, index);
 		}
 	}
 
@@ -42,9 +42,10 @@ public class InvertedIndexBuilder {
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line;
 			Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
+			String location = path.toString();
 			while ((line = reader.readLine()) != null) {
 				for (String word : TextParser.parse(line)) {
-					index.add(stemmer.stem(word).toString(), path.toString(), position);
+					index.add(stemmer.stem(word).toString(), location, position);
 					position++;
 				}
 			}

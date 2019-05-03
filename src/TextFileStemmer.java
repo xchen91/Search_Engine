@@ -52,7 +52,7 @@ public class TextFileStemmer {
 		String[] parsedarray = TextParser.parse(line);
 		ArrayList<String> stemlist = new ArrayList<>();
 		for (String parsedstring : parsedarray) {
-			stemlist.add((String) stemmer.stem(parsedstring));
+			stemlist.add(stemmer.stem(parsedstring).toString());
 		}
 		return stemlist;
 	}
@@ -69,18 +69,14 @@ public class TextFileStemmer {
 	 * @see TextParser#parse(String)
 	 */
 	public static ArrayList<String> stemFile(Path inputFile) throws IOException {
-		ArrayList<String> resultlist = new ArrayList<>();
+		ArrayList<String> resultList = new ArrayList<>();
 		try (BufferedReader reader = Files.newBufferedReader(inputFile)) {
 			String line;
 			while ((line = reader.readLine()) != null) {
-				for (String word : stemLine(line)) {
-					resultlist.add(word);
-				}
+				ArrayList<String> stemList = TextFileStemmer.stemLine(line);
+				resultList.addAll(stemList);
 			}
-			return resultlist;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return resultlist;
+			return resultList;
 		}
 	}
 

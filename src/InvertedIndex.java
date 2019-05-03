@@ -3,6 +3,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Collections;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -11,7 +13,6 @@ import java.util.TreeSet;
  */
 
 public class InvertedIndex {
-
 	/**
 	 * Stores a mapping of words to the positions the words were found.
 	 */
@@ -36,7 +37,8 @@ public class InvertedIndex {
 	 * @throws IOException
 	 */
 
-	public void toJSON(Path path) throws IOException {
+
+	public void toJSON(Path path) throws IOException { // TODO No blank line between Javadoc and method
 		PrettyJSONWriter.asNestedTreeMapMap(this.index, path);
 	}
 
@@ -50,6 +52,9 @@ public class InvertedIndex {
 		PrettyJSONWriter.asObject(this.wordCount, path);
 	}
 
+	/**
+	 * Returns a string representation of this index.
+	 */
 	@Override
 	public String toString() {
 		return index.toString();
@@ -78,7 +83,7 @@ public class InvertedIndex {
 	 * @param element
 	 * @return number of positions
 	 */
-	public int numPositions(String element) {
+	public int numLocations(String element) {
 		if (!index.containsKey(element) || index.get(element) == null) {
 			return 0;
 		} else {
@@ -91,13 +96,16 @@ public class InvertedIndex {
 	 * 
 	 * @return number of elements
 	 */
-	public int numElements() {
-		if (index.isEmpty()) {
-			return 0;
-		} else {
-			return index.size();
-		}
+	public int numWords() {
+		return index.size();
 	}
+
+	/*
+	 * TODO So there should basically be methods for each level in your data
+	 * structures. You have a numElements (should be numWords) for the first level,
+	 * a numPositions (should be numLocations) for the second leve, but nothing for
+	 * the third level in your index.
+	 */
 
 	/**
 	 * Tests whether the index contains the specified word.
@@ -213,4 +221,38 @@ public class InvertedIndex {
 		}
 	}
 
+	 * a method to check if index contains a word in that specific location and
+	 * position.
+	 * 
+	 * @param element  to check
+	 * @param location of the given element
+	 * @param position of the given element
+	 * @return true if the word is stored in that index, in that specific location
+	 *         and that specific position.
+	 */
+	public boolean contains(String element, String location, int position) {
+		return this.contains(element, location) && this.index.get(element).get(location).contains(position);
+	}
+
+	/**
+	 * Get an immutable collection of elements in the index
+	 * 
+	 * @return an immutable collection of elements.
+	 */
+	public Set<String> getWords() {
+		return Collections.unmodifiableSet(index.keySet());
+	}
+
+	/**
+	 * Get an immutable collection of locations of elements in the index
+	 * 
+	 * @param word
+	 * @return an immutable collection of locations.
+	 */
+	public Set<String> getLocations(String word) {
+		if (index.containsKey(word)) {
+			return Collections.unmodifiableSet(index.get(word).keySet());
+		}
+		return Collections.emptySet();
+	}
 }

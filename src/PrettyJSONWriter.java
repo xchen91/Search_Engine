@@ -472,11 +472,6 @@ public class PrettyJSONWriter {
 		quote(element, writer);
 	}
 
-	/*
-	 * You may add additional methods to this class; just do not modify the
-	 * declaration of the ones already provided!
-	 */
-
 	/**
 	 * A simple main method that demonstrates this class.
 	 *
