@@ -51,7 +51,6 @@ public class QueryParser {
 			String line;
 			Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 			while ((line = reader.readLine()) != null) {
-				// TODO parse(line, exact);
 				TreeSet<String> queryLine = new TreeSet<>();
 				for (String string : TextParser.parse(line)) {
 					String newString = stemmer.stem(string).toString();
@@ -68,22 +67,6 @@ public class QueryParser {
 			}
 		}
 	}
-	
-	/* TODO
-	public void parse(String line, boolean exact) {
-		Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
-		TreeSet<String> queryLine = new TreeSet<>();
-		for (String string : TextParser.parse(line)) {
-			String newString = stemmer.stem(string).toString();
-			queryLine.add(newString);
-		}
-		String joined = String.join(" ", queryLine);
-		
-		if (!queryLine.isEmpty() && !map.containsKey(joined)) {
-			map.put(joined, index.search(queryLine, exact));
-		}
-	}
-	*/
 
 	/**
 	 * a method that prints the search result data structure to the JSON file.
