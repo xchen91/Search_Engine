@@ -5,6 +5,9 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -27,7 +30,7 @@ public class PrettyJSONWriter {
 	 * @param elements the elements to write
 	 * @param writer   the writer to use
 	 * @param level    the initial indent level
-	 * @throws IOException
+	 * @throws IOException if the writer encounters any issues
 	 */
 	public static void asArray(TreeSet<Integer> elements, Writer writer, int level) throws IOException {
 		writer.write("[");
@@ -53,7 +56,7 @@ public class PrettyJSONWriter {
 	 *
 	 * @param elements the elements to write
 	 * @param path     the file path to use
-	 * @throws IOException
+	 * @throws IOException if the writer encounters any issues
 	 *
 	 * @see #asArray(TreeSet, Writer, int)
 	 */
@@ -89,7 +92,7 @@ public class PrettyJSONWriter {
 	 * @param elements the elements to write
 	 * @param writer   the writer to use
 	 * @param level    the initial indent level
-	 * @throws IOException
+	 * @throws IOException if the writer encounters any issues
 	 */
 	public static void asObject(TreeMap<String, Integer> elements, Writer writer, int level) throws IOException {
 		writer.write("{");
@@ -118,7 +121,7 @@ public class PrettyJSONWriter {
 	 *
 	 * @param elements the elements to write
 	 * @param path     the file path to use
-	 * @throws IOException
+	 * @throws IOException if the writer encounters any issues
 	 *
 	 * @see #asObject(TreeMap, Writer, int)
 	 */
@@ -154,7 +157,7 @@ public class PrettyJSONWriter {
 	 * @param elements the elements to write
 	 * @param writer   the writer to use
 	 * @param level    the initial indent level
-	 * @throws IOException
+	 * @throws IOException if the writer encounters any issues
 	 */
 	public static void asNestedObject(TreeMap<String, TreeSet<Integer>> elements, Writer writer, int level)
 			throws IOException {
@@ -185,7 +188,7 @@ public class PrettyJSONWriter {
 	 *
 	 * @param elements the elements to write
 	 * @param path     the file path to use
-	 * @throws IOException
+	 * @throws IOException if the writer encounters any issues
 	 *
 	 * @see #asNestedObject(TreeMap, Writer, int)
 	 */
@@ -222,7 +225,7 @@ public class PrettyJSONWriter {
 	 * @param elements the elements to convert to JSON
 	 * @param writer   the writer to use
 	 * @param level    the initial indentation level
-	 * @throws IOException
+	 * @throws IOException if the writer encounters any issues
 	 */
 	public static void asNestedTreeMapMap(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Writer writer,
 			int level) throws IOException {
@@ -253,13 +256,141 @@ public class PrettyJSONWriter {
 	 * 
 	 * @param elements the elements to convert to JSON
 	 * @param path     write a pretty JSON file into this path
-	 * @throws IOException
+	 * @throws IOException if the writer encounters any issues
 	 */
 	public static void asNestedTreeMapMap(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Path path)
 			throws IOException {
 		// THIS IS PROVIDED FOR YOU; DO NOT MODIFY
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
 			asNestedTreeMapMap(elements, writer, 0);
+		}
+	}
+
+	/**
+	 * Writes the location of one search result and some related info as a pretty
+	 * JSON format using the provided {@link Writer} and indentation level.
+	 * 
+	 * @param locations single search result
+	 * @param writer    the writer to use
+	 * @param level     the initial indent level
+	 * @throws IOException if the writer encounters any issues
+	 */
+	public static void asNestedLocation(SearchResult locations, Writer writer, int level) throws IOException {
+		DecimalFormat FORMATTER = new DecimalFormat("0.00000000");
+		indent(writer, level);
+		writer.write("{");
+		if (locations != null) {
+			writer.write("\n");
+			indent(writer, level + 1);
+			quote("where", writer);
+			writer.write(": ");
+			quote(locations.getLocation(), writer);
+			writer.write(",");
+			writer.write("\n");
+			indent(writer, level + 1);
+			quote("count", writer);
+			writer.write(": ");
+			Integer occurence = locations.getOccurence();
+			writer.write(occurence.toString());
+			writer.write(",");
+			writer.write("\n");
+			indent(writer, level + 1);
+			quote("score", writer);
+			writer.write(": ");
+			writer.write(FORMATTER.format(locations.getScore()));
+		}
+		writer.write("\n");
+		indent(writer, level);
+		writer.write("}");
+	}
+
+	/**
+	 * Writes a list of search result of a query line as a pretty JSON format using
+	 * the provided {@link Writer} and indentation level.
+	 * 
+	 * @param elements the elements to convert to JSON
+	 * @param writer   the writer to use
+	 * @param level    the initial indent level
+	 * @throws IOException if the writer encounters any issues
+	 */
+	public static void asNestedList(ArrayList<SearchResult> elements, Writer writer, int level) throws IOException {
+		if (!elements.isEmpty()) {
+			writer.write("\n");
+			var iterator = elements.iterator();
+			asNestedLocation(iterator.next(), writer, level + 1);
+			while (iterator.hasNext()) {
+				writer.write(",");
+				writer.write("\n");
+				asNestedLocation(iterator.next(), writer, level + 1);
+			}
+		}
+		writer.write("\n");
+		indent(writer, level);
+		writer.write("]");
+
+	}
+
+	/**
+	 * Writes a query line of search result as a pretty JSON format using the
+	 * provided {@link Writer} and indentation level.
+	 * 
+	 * @param query    the query lines to convert to JSON
+	 * @param elements the elements to convert to JSON
+	 * @param writer   the writer to use
+	 * @param level    the initial indent level
+	 * @throws IOException if the writer encounters any issues
+	 */
+	public static void asNestedQuery(String query, ArrayList<SearchResult> elements, Writer writer, int level)
+			throws IOException {
+		indent(writer, level);
+		quote(query, writer);
+		writer.write(": ");
+		writer.write("[");
+		asNestedList(elements, writer, level);
+	}
+
+	/**
+	 * Writes the sorted map of search result as a pretty JSON format using the
+	 * provided {@link Writer} and indentation level.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @param writer   the writer to use
+	 * @param level    the initial indent level
+	 * @throws IOException if the writer encounters any issues
+	 */
+	public static void asNestedSearchResult(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer, int level)
+			throws IOException {
+		indent(writer, level);
+		writer.write("{");
+		writer.write("\n");
+		if (!elements.isEmpty()) {
+			Iterator<String> iterator = elements.keySet().iterator();
+			String current = iterator.next();
+			asNestedQuery(current, elements.get(current), writer, level + 1);
+			while (iterator.hasNext()) {
+				current = iterator.next();
+				writer.write(",");
+				writer.write("\n");
+				asNestedQuery(current, elements.get(current), writer, level + 1);
+			}
+		}
+		writer.write("\n");
+		indent(writer, level);
+		writer.write("}");
+	}
+
+	/**
+	 * Writes the query line and a list of SearchResult of that line as a pretty
+	 * JSON format to the output file
+	 * 
+	 * @param elements the elements to convert to JSON
+	 * @param path     write a pretty JSON file into this path
+	 * @throws IOException if the writer encounters any issues
+	 */
+	public static void asNestedSearchResult(TreeMap<String, ArrayList<SearchResult>> elements, Path path)
+			throws IOException {
+		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+			asNestedSearchResult(elements, writer, 0);
 		}
 	}
 

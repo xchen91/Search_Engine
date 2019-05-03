@@ -24,6 +24,16 @@ public class Driver {
 		Instant start = Instant.now();
 		ArgumentMap map = new ArgumentMap(args);
 		InvertedIndex index = new InvertedIndex();
+		QueryParser query = new QueryParser(index);
+
+		if (map.hasFlag("-path") && map.getPath("-path") != null) {
+			Path filePath = map.getPath("-path");
+			try {
+				InvertedIndexBuilder.build(filePath, index);
+			} catch (IOException e) {
+				System.out.println("Unable to build index from path: " + filePath);
+			}
+		}
 
 		if (map.hasFlag("-path") && map.getPath("-path") != null) {
 			Path filePath = map.getPath("-path");
@@ -52,6 +62,7 @@ public class Driver {
 		 * }
 		 */
 
+
 		if (map.hasFlag("-index")) {
 			Path indexPath = map.getPath("-index", Paths.get("index.json"));
 			try {
@@ -67,6 +78,29 @@ public class Driver {
 				index.numtoJSON(locationPath);
 			} catch (IOException e) {
 				System.out.println("Unable to print locations from path: " + locationPath);
+			}
+		}
+
+		if (map.hasFlag("-query") && map.getPath("-query") != null) {
+			Path queryPath = map.getPath("-query");
+			try {
+				boolean exact = false;
+				if (map.hasFlag("-exact")) {
+					exact = true;
+				}
+				query.parse(queryPath, exact);
+			} catch (IOException e) {
+				System.out.println("Unable to build the search from path: " + queryPath);
+			}
+		}
+
+		if (map.hasFlag("-results")) {
+			Path resultPath = map.getPath("-results", Paths.get("results.json"));
+			try {
+				query.querytoJSON(resultPath);
+
+			} catch (IOException e) {
+				System.out.println("Unable to print the search result from path: " + resultPath);
 			}
 		}
 

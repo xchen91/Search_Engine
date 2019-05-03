@@ -1,5 +1,8 @@
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Collections;
 import java.util.Set;
 import java.util.TreeMap;
@@ -33,6 +36,7 @@ public class InvertedIndex {
 	 * @param path the output file path to print JSON file
 	 * @throws IOException
 	 */
+
 
 	public void toJSON(Path path) throws IOException { // TODO No blank line between Javadoc and method
 		PrettyJSONWriter.asNestedTreeMapMap(this.index, path);
@@ -125,6 +129,98 @@ public class InvertedIndex {
 	}
 
 	/**
+	 * @return number of words
+	 */
+	public int count() {
+		return index.size();
+	}
+
+	/**
+	 * @param word
+	 * @return number of locations
+	 */
+	public int count(String word) {
+		if (index.containsKey(word)) {
+			return index.get(word).size();
+		} else {
+			return 0;
+		}
+	}
+
+	/**
+	 * @param word
+	 * @param location
+	 * @return number of positions
+	 */
+	public int count(String word, String location) {
+		if (this.contains(word, location)) {
+			return this.index.get(word).get(location).size();
+		} else {
+			return 0;
+		}
+	}
+
+	/**
+	 * @param queryLine
+	 * @return result
+	 */
+	public ArrayList<SearchResult> exactSearch(TreeSet<String> queryLine) {
+		ArrayList<SearchResult> result = new ArrayList<>();
+		HashMap<String, SearchResult> map = new HashMap<>();
+		for (String word : queryLine) {
+			if (contains(word)) {
+				exactSearch(word, result, map);
+			}
+		}
+		Collections.sort(result);
+		return result;
+	}
+
+	/**
+	 * @param word
+	 * @param result
+	 * @param map
+	 */
+	private void exactSearch(String word, ArrayList<SearchResult> result, HashMap<String, SearchResult> map) {
+		for (String location : index.get(word).keySet()) {
+			if (map.containsKey(location)) {
+				map.get(location).updateOccurence(this.count(word, location));
+			} else {
+				SearchResult newResult = new SearchResult(location, this.wordCount.get(location),
+						this.count(word, location));
+				result.add(newResult);
+				map.put(location, newResult);
+			}
+		}
+	}
+
+	/**
+	 * @param queryLine
+	 * @return result
+	 */
+	public ArrayList<SearchResult> partialSearch(TreeSet<String> queryLine) {
+		ArrayList<SearchResult> result = new ArrayList<>();
+		HashMap<String, SearchResult> map = new HashMap<>();
+		for (String word : queryLine) {
+			partialSearch(word, result, map);
+		}
+		Collections.sort(result);
+		return result;
+	}
+
+	/**
+	 * @param word
+	 * @param result
+	 * @param map
+	 */
+	private void partialSearch(String word, ArrayList<SearchResult> result, HashMap<String, SearchResult> map) {
+		for (String string : index.keySet()) {
+			if (string.startsWith(word)) {
+				exactSearch(string, result, map);
+			}
+		}
+	}
+
 	 * a method to check if index contains a word in that specific location and
 	 * position.
 	 * 
