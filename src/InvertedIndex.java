@@ -1,10 +1,9 @@
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Collections;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -13,6 +12,7 @@ import java.util.TreeSet;
  */
 
 public class InvertedIndex {
+
 	/**
 	 * Stores a mapping of words to the positions the words were found.
 	 */
@@ -37,8 +37,7 @@ public class InvertedIndex {
 	 * @throws IOException
 	 */
 
-
-	public void toJSON(Path path) throws IOException { // TODO No blank line between Javadoc and method
+	public void toJSON(Path path) throws IOException {
 		PrettyJSONWriter.asNestedTreeMapMap(this.index, path);
 	}
 
@@ -52,9 +51,6 @@ public class InvertedIndex {
 		PrettyJSONWriter.asObject(this.wordCount, path);
 	}
 
-	/**
-	 * Returns a string representation of this index.
-	 */
 	@Override
 	public String toString() {
 		return index.toString();
@@ -83,7 +79,7 @@ public class InvertedIndex {
 	 * @param element
 	 * @return number of positions
 	 */
-	public int numLocations(String element) {
+	public int numPositions(String element) {
 		if (!index.containsKey(element) || index.get(element) == null) {
 			return 0;
 		} else {
@@ -96,16 +92,13 @@ public class InvertedIndex {
 	 * 
 	 * @return number of elements
 	 */
-	public int numWords() {
-		return index.size();
+	public int numElements() {
+		if (index.isEmpty()) {
+			return 0;
+		} else {
+			return index.size();
+		}
 	}
-
-	/*
-	 * TODO So there should basically be methods for each level in your data
-	 * structures. You have a numElements (should be numWords) for the first level,
-	 * a numPositions (should be numLocations) for the second leve, but nothing for
-	 * the third level in your index.
-	 */
 
 	/**
 	 * Tests whether the index contains the specified word.
@@ -129,6 +122,8 @@ public class InvertedIndex {
 	}
 
 	/**
+	 * the number of locations stored
+	 * 
 	 * @return number of words
 	 */
 	public int count() {
@@ -136,6 +131,8 @@ public class InvertedIndex {
 	}
 
 	/**
+	 * the number of locations stored given specific word
+	 * 
 	 * @param word
 	 * @return number of locations
 	 */
@@ -148,6 +145,8 @@ public class InvertedIndex {
 	}
 
 	/**
+	 * the number of locations stored given specific word and location
+	 * 
 	 * @param word
 	 * @param location
 	 * @return number of positions
@@ -161,15 +160,17 @@ public class InvertedIndex {
 	}
 
 	/**
-	 * @param queryLine
-	 * @return result
+	 * Exact search for query words
+	 * 
+	 * @param queries the query line for searching
+	 * @return the search result
 	 */
-	public ArrayList<SearchResult> exactSearch(TreeSet<String> queryLine) {
+	public ArrayList<SearchResult> exactSearch(Collection<String> queries) {
 		ArrayList<SearchResult> result = new ArrayList<>();
 		HashMap<String, SearchResult> map = new HashMap<>();
-		for (String word : queryLine) {
+		for (String word : queries) {
 			if (contains(word)) {
-				exactSearch(word, result, map);
+				searchProcess(word, result, map);
 			}
 		}
 		Collections.sort(result);
@@ -177,11 +178,13 @@ public class InvertedIndex {
 	}
 
 	/**
-	 * @param word
-	 * @param result
-	 * @param map
+	 * A search process method for exact search and partial search
+	 * 
+	 * @param word   a query word for search
+	 * @param result the result list for adding query word
+	 * @param map    keep track and store the search process
 	 */
-	private void exactSearch(String word, ArrayList<SearchResult> result, HashMap<String, SearchResult> map) {
+	private void searchProcess(String word, ArrayList<SearchResult> result, HashMap<String, SearchResult> map) {
 		for (String location : index.get(word).keySet()) {
 			if (map.containsKey(location)) {
 				map.get(location).updateOccurence(this.count(word, location));
@@ -195,64 +198,46 @@ public class InvertedIndex {
 	}
 
 	/**
-	 * @param queryLine
-	 * @return result
+	 * Partial search for query words
+	 * 
+	 * @param queries the query line for searching
+	 * @return result the search result
 	 */
-	public ArrayList<SearchResult> partialSearch(TreeSet<String> queryLine) {
+	public ArrayList<SearchResult> partialSearch(Collection<String> queries) {
 		ArrayList<SearchResult> result = new ArrayList<>();
 		HashMap<String, SearchResult> map = new HashMap<>();
-		for (String word : queryLine) {
-			partialSearch(word, result, map);
+		for (String word : queries) {
+			searchHelper(word, result, map);
 		}
 		Collections.sort(result);
 		return result;
 	}
 
 	/**
-	 * @param word
-	 * @param result
-	 * @param map
+	 * A helper method for partial search process
+	 * 
+	 * @param word   key word for searching
+	 * @param result the result list for adding query word
+	 * @param map    keep track and store the search process
 	 */
-	private void partialSearch(String word, ArrayList<SearchResult> result, HashMap<String, SearchResult> map) {
+	private void searchHelper(String word, ArrayList<SearchResult> result, HashMap<String, SearchResult> map) {
 		for (String string : index.keySet()) {
 			if (string.startsWith(word)) {
-				exactSearch(string, result, map);
+				searchProcess(string, result, map);
 			}
 		}
 	}
 
-	 * a method to check if index contains a word in that specific location and
-	 * position.
+	/**
+	 * A general search method given queries for searching and a flag deciding exact
+	 * search or partial search
 	 * 
-	 * @param element  to check
-	 * @param location of the given element
-	 * @param position of the given element
-	 * @return true if the word is stored in that index, in that specific location
-	 *         and that specific position.
+	 * @param queries the query line for searching
+	 * @param exact   a boolean checking if it is exact search or partial search
+	 * @return search the search result
 	 */
-	public boolean contains(String element, String location, int position) {
-		return this.contains(element, location) && this.index.get(element).get(location).contains(position);
+	public ArrayList<SearchResult> search(Collection<String> queries, boolean exact) {
+		return exact ? exactSearch(queries) : partialSearch(queries);
 	}
 
-	/**
-	 * Get an immutable collection of elements in the index
-	 * 
-	 * @return an immutable collection of elements.
-	 */
-	public Set<String> getWords() {
-		return Collections.unmodifiableSet(index.keySet());
-	}
-
-	/**
-	 * Get an immutable collection of locations of elements in the index
-	 * 
-	 * @param word
-	 * @return an immutable collection of locations.
-	 */
-	public Set<String> getLocations(String word) {
-		if (index.containsKey(word)) {
-			return Collections.unmodifiableSet(index.get(word).keySet());
-		}
-		return Collections.emptySet();
-	}
 }
