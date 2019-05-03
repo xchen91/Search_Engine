@@ -26,15 +26,6 @@ public class Driver {
 		InvertedIndex index = new InvertedIndex();
 		QueryParser query = new QueryParser(index);
 
-		if (map.hasFlag("-path") && map.getPath("-path") != null) {
-			Path filePath = map.getPath("-path");
-			try {
-				InvertedIndexBuilder.build(filePath, index);
-			} catch (IOException e) {
-				System.out.println("Unable to build index from path: " + filePath);
-			}
-		}
-
 		if (map.hasFlag("-path")) {
 			if (map.getPath("-path") != null) {
 				Path filePath = map.getPath("-path");
