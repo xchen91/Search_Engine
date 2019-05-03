@@ -4,6 +4,8 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 
+// TODO Address the pull request for project 1, and then integrate project 2 code into your master branch.
+
 /**
  * Class responsible for running this project based on the provided command-line
  * arguments. See the README for details.
@@ -61,6 +63,8 @@ public class Driver {
 					exact = true;
 				}
 				query.parse(queryPath, exact);
+				
+				// TODO query.parse(queryPath, map.hasFlag("-exact"));
 			} catch (IOException e) {
 				System.out.println("Unable to build the search from path: " + queryPath);
 			}
