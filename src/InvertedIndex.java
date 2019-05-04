@@ -211,10 +211,6 @@ public class InvertedIndex {
 				if (string.startsWith(word)) {
 					searchProcess(string, result, map);
 				}
-				/* TODO else {
-					break;
-				}
-				*/
 			}
 		}
 		Collections.sort(result);

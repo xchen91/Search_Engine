@@ -65,7 +65,6 @@ public class Driver {
 					exact = true;
 				}
 				query.parse(queryPath, exact);
-				// TODO query.parse(queryPath, map.hasFlag("-exact"));
 			} catch (IOException e) {
 				System.out.println("Unable to build the search from path: " + queryPath);
 			}
