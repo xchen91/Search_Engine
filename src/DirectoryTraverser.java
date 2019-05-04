@@ -13,7 +13,6 @@ import java.util.ArrayList;
  * This class demonstrates how to use a {@link DirectoryTraverser} to create a
  * recursive file listing.
  */
-
 public class DirectoryTraverser {
 
 	/**
@@ -24,7 +23,6 @@ public class DirectoryTraverser {
 	 * @param paths list of paths needed to be added
 	 * @throws IOException
 	 */
-
 	private static void privateTraverse(Path path, ArrayList<Path> paths) throws IOException {
 		if (Files.isDirectory(path)) {
 			try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
@@ -62,5 +60,4 @@ public class DirectoryTraverser {
 		privateTraverse(directory, paths);
 		return paths;
 	}
-
 }

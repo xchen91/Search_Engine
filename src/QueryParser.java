@@ -51,7 +51,6 @@ public class QueryParser {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				parse(line, exact);
-
 			}
 		}
 	}

@@ -169,7 +169,7 @@ public class InvertedIndex {
 		ArrayList<SearchResult> result = new ArrayList<>();
 		HashMap<String, SearchResult> map = new HashMap<>();
 		for (String word : queries) {
-			if (contains(word)) {
+			if (contains(word)) { // TODO if (index.containsKey(element))
 				searchProcess(word, result, map);
 			}
 		}
@@ -208,11 +208,21 @@ public class InvertedIndex {
 		HashMap<String, SearchResult> map = new HashMap<>();
 		for (String word : queries) {
 			searchHelper(word, result, map);
+			
+			for (String string : index.keySet()) {
+				if (string.startsWith(word)) {
+					searchProcess(string, result, map);
+				}
+			}
+			
+			// TODO Fix this:
+			// https://github.com/usf-cs212-spring2019/project-xchen91/blob/7da687db5f8f3ef2b595dff3cdcc211b63d7b754/src/InvertedIndex.java#L213-L218
 		}
 		Collections.sort(result);
 		return result;
 	}
 
+	// TODO Remove
 	/**
 	 * A helper method for partial search process
 	 * 
