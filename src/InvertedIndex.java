@@ -172,6 +172,11 @@ public class InvertedIndex {
 			if (index.containsKey(word)) {
 				searchProcess(word, result, map);
 			}
+			/*
+			 * else {
+			 * 	break;
+			 * }
+			 */
 		}
 		Collections.sort(result);
 		return result;
