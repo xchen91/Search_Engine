@@ -30,7 +30,7 @@ public class QueryParser {
 	/**
 	 * Class constructor
 	 * 
-	 * @param index
+	 * @param index a mapping of query line and the lists of search result
 	 */
 	public QueryParser(InvertedIndex index) {
 		this.index = index;

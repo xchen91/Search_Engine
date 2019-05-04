@@ -4,11 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-/*
- * TODO Generally you do NOT include a blank line between the Javadoc comment
- * and the element the comment is for!
- */
-
 /**
  * This class demonstrates how to use a {@link DirectoryTraverser} to create a
  * recursive file listing.
@@ -19,6 +14,7 @@ public class DirectoryTraverser {
 	 * a private method safely starts the recursive traversal with the proper
 	 * padding and keep add the text file found in that directory to the list of
 	 * path
+	 * 
 	 * @param path  to traverse
 	 * @param paths list of paths needed to be added
 	 * @throws IOException
