@@ -6,7 +6,7 @@ import java.time.Instant;
 
 /**
  * Class responsible for running this project based on the provided command-line
- * arguments. See the README for details.
+ * arguments. See the README for details. Project3a test passed!
  *
  * @author CS 212 Software Development
  * @author University of San Francisco
