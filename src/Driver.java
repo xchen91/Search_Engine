@@ -60,12 +60,7 @@ public class Driver {
 		if (map.hasFlag("-query") && map.getPath("-query") != null) {
 			Path queryPath = map.getPath("-query");
 			try {
-				boolean exact = false;
-				if (map.hasFlag("-exact")) {
-					exact = true;
-				}
-				query.parse(queryPath, exact);
-				// TODO query.parse(queryPath, map.hasFlag("-exact"));
+				query.parse(queryPath, map.hasFlag("-exact"));
 			} catch (IOException e) {
 				System.out.println("Unable to build the search from path: " + queryPath);
 			}

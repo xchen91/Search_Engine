@@ -171,12 +171,9 @@ public class InvertedIndex {
 		for (String word : queries) {
 			if (index.containsKey(word)) {
 				searchProcess(word, result, map);
+			} else {
+				break;
 			}
-			/*
-			 * else {
-			 * 	break;
-			 * }
-			 */
 		}
 		Collections.sort(result);
 		return result;
