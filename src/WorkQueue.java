@@ -92,7 +92,7 @@ public class WorkQueue {
 	public void finish() {
 		synchronized (this.queue) {
 			try {
-				while (this.pending > 0 && !this.queue.isEmpty()) {
+				while (this.pending > 0) {
 					queue.wait();
 				}
 				queue.notifyAll();
