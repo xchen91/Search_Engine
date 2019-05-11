@@ -16,6 +16,18 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
 public class InvertedIndexBuilder {
 
 	/**
+	 * 
+	 */
+	private final InvertedIndex index;
+
+	/**
+	 * @param index
+	 */
+	public InvertedIndexBuilder(InvertedIndex index) {
+		this.index = index;
+	}
+
+	/**
 	 * Adds every words in all text file in this list of path and the position it
 	 * was found to the inverted index.
 	 * 
@@ -23,9 +35,9 @@ public class InvertedIndexBuilder {
 	 * @param index an inverted index data structure
 	 * @throws IOException
 	 */
-	public static void build(Path path, InvertedIndex index) throws IOException {
+	public void build(Path path) throws IOException {
 		for (Path file : DirectoryTraverser.publicTraverse(path)) {
-			addFile(file, index);
+			addFile(file, this.index);
 		}
 	}
 

@@ -23,14 +23,32 @@ public class Driver {
 	public static void main(String[] args) {
 		Instant start = Instant.now();
 		ArgumentMap map = new ArgumentMap(args);
-		InvertedIndex index = new InvertedIndex();
-		QueryParser query = new QueryParser(index);
+		InvertedIndex index;
+		QueryParser query;
+		InvertedIndexBuilder builder;
+		int threads = 0;
+
+		if (map.hasFlag("-threads")) {
+			String numThreads = map.getString("-threads", "5");
+			try {
+				threads = Integer.parseInt(numThreads);
+			} catch (NumberFormatException e) {
+				threads = 5;
+			}
+			index = new ThreadSafeInvertedIndex();
+			query = new ThreadSafeQueryParser((ThreadSafeInvertedIndex) index, threads);
+			builder = new ThreadSafeInvertedIndexBuilder((ThreadSafeInvertedIndex) index, threads);
+		} else {
+			index = new InvertedIndex();
+			query = new QueryParser(index);
+			builder = new InvertedIndexBuilder(index);
+		}
 
 		if (map.hasFlag("-path")) {
 			if (map.getPath("-path") != null) {
 				Path filePath = map.getPath("-path");
 				try {
-					InvertedIndexBuilder.build(filePath, index);
+					builder.build(filePath);
 				} catch (IOException e) {
 					System.out.println("Unable to build index from path: " + filePath);
 				}

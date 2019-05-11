@@ -27,6 +27,11 @@ public class WorkQueue {
 	public static final int DEFAULT = 5;
 
 	/**
+	 * 
+	 */
+	private int pending;
+
+	/**
 	 * Starts a work queue with the default number of threads.
 	 *
 	 * @see #WorkQueue(int)
@@ -44,7 +49,9 @@ public class WorkQueue {
 		this.queue = new LinkedList<Runnable>();
 		this.workers = new PoolWorker[threads];
 
-		shutdown = false;
+		this.shutdown = false;
+
+		this.pending = 0;
 
 		// start the threads so they are waiting in the background
 		for (int i = 0; i < threads; i++) {
@@ -61,8 +68,37 @@ public class WorkQueue {
 	 */
 	public void execute(Runnable r) {
 		synchronized (queue) {
+			pending++;
 			queue.addLast(r);
 			queue.notifyAll();
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public void pendingDecrease() {
+		synchronized (queue) {
+			pending--;
+			if (pending <= 0 && queue.isEmpty()) {
+				queue.notifyAll();
+			}
+		}
+	}
+
+	/**
+	 * Waits for all pending work to be finished.
+	 */
+	public void finish() {
+		synchronized (this.queue) {
+			try {
+				while (this.pending > 0 && !this.queue.isEmpty()) {
+					queue.wait();
+				}
+				queue.notifyAll();
+			} catch (InterruptedException e) {
+
+			}
 		}
 	}
 
@@ -95,7 +131,6 @@ public class WorkQueue {
 	 * running in the background until a shutdown is requested.
 	 */
 	private class PoolWorker extends Thread {
-
 		@Override
 		public void run() {
 			Runnable r = null;
@@ -106,7 +141,7 @@ public class WorkQueue {
 						try {
 							queue.wait();
 						} catch (InterruptedException ex) {
-							System.err.println("Warning: Work queue interrupted while waiting.");
+							System.err.println("Warning: Work queue interrupted.");
 							Thread.currentThread().interrupt();
 						}
 					}
@@ -127,6 +162,8 @@ public class WorkQueue {
 					// catch runtime exceptions to avoid leaking threads
 					System.err.println("Warning: Work queue encountered an exception while running.");
 				}
+
+				pendingDecrease();
 			}
 		}
 	}
