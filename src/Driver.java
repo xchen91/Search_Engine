@@ -35,6 +35,9 @@ public class Driver {
 			} catch (NumberFormatException e) {
 				threads = 5;
 			}
+			if(threads < -1){
+				threads = 5;
+			}
 			index = new ThreadSafeInvertedIndex();
 			query = new ThreadSafeQueryParser((ThreadSafeInvertedIndex) index, threads);
 			builder = new ThreadSafeInvertedIndexBuilder((ThreadSafeInvertedIndex) index, threads);
