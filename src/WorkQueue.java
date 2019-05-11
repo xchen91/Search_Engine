@@ -97,7 +97,7 @@ public class WorkQueue {
 				}
 				queue.notifyAll();
 			} catch (InterruptedException e) {
-
+				System.err.println("Warning: Work queue encountered an exception while running.");
 			}
 		}
 	}
@@ -109,7 +109,6 @@ public class WorkQueue {
 	public void shutdown() {
 		// safe to do unsynchronized due to volatile keyword
 		shutdown = true;
-
 		synchronized (queue) {
 			queue.notifyAll();
 		}
@@ -162,7 +161,6 @@ public class WorkQueue {
 					// catch runtime exceptions to avoid leaking threads
 					System.err.println("Warning: Work queue encountered an exception while running.");
 				}
-
 				pendingDecrease();
 			}
 		}
