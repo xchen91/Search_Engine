@@ -83,7 +83,7 @@ public class SimpleReadWriteLock {
 					try {
 						lock.wait();
 					} catch (InterruptedException e) {
-						Thread.currentThread().interrupt();
+						System.out.println("Warning: Work queue interrupted.");
 					}
 				}
 				readers++;
@@ -121,7 +121,7 @@ public class SimpleReadWriteLock {
 					try {
 						lock.wait();
 					} catch (InterruptedException e) {
-						System.out.println("Do not use lock propertely");
+						System.out.println("Warning: Work queue interrupted.");
 					}
 				}
 				writers++;
