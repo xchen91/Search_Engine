@@ -10,6 +10,18 @@ import java.util.TreeSet;
 import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
+/*
+ * TODO
+ * 
+ Create a QueryParserInterface
+ 
+ public void parse(Path path, boolean exact) throws IOException;
+ public void parse(String line, boolean exact);
+ public void querytoJSON(Path path) throws IOException;
+ 
+ implement this interface in both your QueryParser and ThreadSAfeQueryParser instead of extending
+ */
+
 /**
  * @author tracyair
  *
@@ -77,11 +89,27 @@ public class ThreadSafeQueryParser extends QueryParser {
 			queryLine.add(newString);
 		}
 		String joined = String.join(" ", queryLine);
+		
 		synchronized (this.map) {
 			if (!queryLine.isEmpty() && !map.containsKey(joined)) {
 				map.put(joined, index.search(queryLine, exact));
 			}
 		}
+		
+		/* TODO
+		synchronized (this.map) {
+			if (queryLine.isEmpty() || map.containsKey(joined)) {
+				return;
+			}
+		}
+		
+		List<SearchResult> local = index.search(queryLine, exact);
+		
+		synchronized (this.map) {
+			map.put(joined, local);
+		}
+		*/
+		
 	}
 
 	/**

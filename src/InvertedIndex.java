@@ -229,4 +229,20 @@ public class InvertedIndex {
 		return exact ? exactSearch(queries) : partialSearch(queries);
 	}
 
+	/* TODO
+	public void addAll(InvertedIndex other) {
+		for (String key : other.index.keySet()) {
+			if (this.index.containsKey(key) == false) {
+				this.index.put(key, other.index.get(key));
+			}
+			else {
+				// loop
+			}
+		}
+		
+		for (String location : other.wordCount.keySet()) {
+			
+		}
+	}
+	*/
 }
