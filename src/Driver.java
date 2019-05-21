@@ -48,10 +48,6 @@ public class Driver {
 			builder = new InvertedIndexBuilder(index);
 		}
 
-		if (map.hasFlag("-url")) {
-
-		}
-
 		if (map.hasFlag("-path")) {
 			if (map.getPath("-path") != null) {
 				Path filePath = map.getPath("-path");
