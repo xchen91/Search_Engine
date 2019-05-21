@@ -17,7 +17,7 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
  *
  */
 
-public class QueryParser {
+public class QueryParser implements QueryParserInterface {
 	/**
 	 * Stores query line into inverted index data structure
 	 */
@@ -37,15 +37,7 @@ public class QueryParser {
 		this.map = new TreeMap<>();
 	}
 
-	/**
-	 * This method first makes the query file into every single query line, and uses
-	 * the exactSearch and patialSearch in InvertedIndex and finally, puts the query
-	 * line and result into result data structure of this class.
-	 * 
-	 * @param path  the path of file that needs to be searched
-	 * @param exact a boolean checking if it is exact search or partial search
-	 * @throws IOException
-	 */
+	@Override
 	public void parse(Path path, boolean exact) throws IOException {
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line;
@@ -55,12 +47,7 @@ public class QueryParser {
 		}
 	}
 
-	/**
-	 * Parse the line and output the result
-	 * 
-	 * @param line  query lines
-	 * @param exact a boolean checking if it is exact search or not
-	 */
+	@Override
 	public void parse(String line, boolean exact) {
 		Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 		TreeSet<String> queryLine = new TreeSet<>();
@@ -74,12 +61,7 @@ public class QueryParser {
 		}
 	}
 
-	/**
-	 * a method that prints the search result data structure to the JSON file.
-	 * 
-	 * @param path the path of the JSON file output
-	 * @throws IOException
-	 */
+	@Override
 	public void querytoJSON(Path path) throws IOException {
 		PrettyJSONWriter.asNestedSearchResult(map, path);
 	}
