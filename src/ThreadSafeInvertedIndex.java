@@ -151,4 +151,14 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 			lock.readLock().unlock();
 		}
 	}
+
+	@Override
+	public void addAll(InvertedIndex other) {
+		lock.writeLock().lock();
+		try {
+			super.addAll(other);
+		} finally {
+			lock.writeLock().unlock();
+		}
+	}
 }
