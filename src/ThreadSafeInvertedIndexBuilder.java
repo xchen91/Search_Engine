@@ -1,8 +1,6 @@
 import java.io.IOException;
 import java.nio.file.Path;
 
-// TODO Need to fill in all of your Javadoc
-
 /**
  * @author tracyair
  *
@@ -10,28 +8,28 @@ import java.nio.file.Path;
 public class ThreadSafeInvertedIndexBuilder extends InvertedIndexBuilder {
 
 	/**
-	 * 
+	 * a ThreadSafeInvertedIndex data structure
 	 */
-	private static ThreadSafeInvertedIndex index; // TODO Should not be static
+	private final ThreadSafeInvertedIndex index;
 	/**
-	 * 
+	 * number of threads
 	 */
 	private int numThreads;
 
 	/**
-	 * @param index
-	 * @param numThreads
+	 * Initializes the ThreadSafeInvertedIndexBuilder
+	 * 
+	 * @param index      a ThreadSafeInvertedIndex data structure
+	 * @param numThreads number of threads
 	 */
 	public ThreadSafeInvertedIndexBuilder(ThreadSafeInvertedIndex index, int numThreads) {
 		super(index);
-		ThreadSafeInvertedIndexBuilder.index = index;
+		this.index = index;
 		this.numThreads = numThreads;
 	}
 
-	/**
-	 * @param path
-	 */
-	public void build(Path path) throws IOException { // TODO @Override
+	@Override
+	public void build(Path path) throws IOException {
 		WorkQueue queue = new WorkQueue(this.numThreads);
 		for (Path singlePath : DirectoryTraverser.publicTraverse(path)) {
 			queue.execute(new Task(singlePath));
@@ -44,15 +42,15 @@ public class ThreadSafeInvertedIndexBuilder extends InvertedIndexBuilder {
 	 * @author tracyair
 	 *
 	 */
-	private static class Task implements Runnable { // TODO Make a non-static class
+	private class Task implements Runnable {
 
 		/**
-		 * 
+		 * the file path for adding
 		 */
 		private final Path path;
 
 		/**
-		 * @param path
+		 * @param path the file path for adding
 		 */
 		public Task(Path path) {
 			this.path = path;
@@ -61,13 +59,9 @@ public class ThreadSafeInvertedIndexBuilder extends InvertedIndexBuilder {
 		@Override
 		public void run() {
 			try {
-				InvertedIndexBuilder.addFile(this.path, index);
-
-				/*
-				 * TODO InvertedIndex local = new InvertedIndex();
-				 * InvertedIndexBuilder.addFile(this.path, local); index.addAll(local);
-				 */
-
+				InvertedIndex local = new InvertedIndex();
+				InvertedIndexBuilder.addFile(this.path, local);
+				index.addAll(local);
 			} catch (IOException e) {
 				System.err.println("Unable to add the file to the index: " + this.path.toString());
 			}

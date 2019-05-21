@@ -3,36 +3,24 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 
-// TODO Missing numtoJSON
-// TODO Use the @Override annotation for all overridden methods (Eclipse can do this for you)
-
 /**
  * @author tracyair
- * TODO
  */
 public class ThreadSafeInvertedIndex extends InvertedIndex {
 	/**
-	 * TODO
+	 * a simple read and write lock
 	 */
 	private final SimpleReadWriteLock lock;
 
 	/**
-	 * TODO 
+	 * Initializes the ThreadSafeInvertedIndex
 	 */
 	public ThreadSafeInvertedIndex() {
 		super();
 		this.lock = new SimpleReadWriteLock();
 	}
-	
-	// TODO Do not need to Javadoc the @Overridden methods!
 
-	/**
-	 * the ThreadSafe version of toJSON method
-	 * 
-	 * @param path the output file path to print JSON file
-	 * @throws IOException
-	 */
-
+	@Override
 	public void toJSON(Path path) throws IOException {
 		this.lock.readLock().lock();
 		try {
@@ -42,13 +30,8 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 		}
 	}
 
-	/**
-	 * the ThreadSafe version of numtoJSON method
-	 * 
-	 * @param path the output file path to print JSON file
-	 * @throws IOException
-	 */
-	public void locationsJSON(Path path) throws IOException { // TODO numtoJSON
+	@Override
+	public void numtoJSON(Path path) throws IOException {
 		this.lock.readLock().lock();
 		try {
 			super.numtoJSON(path);
@@ -57,9 +40,7 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 		}
 	}
 
-	/**
-	 * Returns the thread safe string representation of this index.
-	 */
+	@Override
 	public String toString() {
 		this.lock.readLock().lock();
 		try {
@@ -69,13 +50,7 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 		}
 	}
 
-	/**
-	 * the ThreadSafe version of add method
-	 *
-	 * @param element  word to clean and add to index
-	 * @param location location word was found
-	 * @param position the position the word at
-	 */
+	@Override
 	public void add(String element, String location, int position) {
 		this.lock.writeLock().lock();
 		try {
@@ -85,12 +60,7 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 		}
 	}
 
-	/**
-	 * the ThreadSafe version of numPositions method
-	 * 
-	 * @param element
-	 * @return number of positions
-	 */
+	@Override
 	public int numPositions(String element) {
 		this.lock.readLock().lock();
 		try {
@@ -100,11 +70,7 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 		}
 	}
 
-	/**
-	 * the ThreadSafe version of numElements method
-	 * 
-	 * @return number of elements
-	 */
+	@Override
 	public int numElements() {
 		this.lock.readLock().lock();
 		try {
@@ -114,12 +80,7 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 		}
 	}
 
-	/**
-	 * the ThreadSafe version of contains method
-	 *
-	 * @param element to look for
-	 * @return true if the element is stored in the index
-	 */
+	@Override
 	public boolean contains(String element) {
 		this.lock.readLock().lock();
 		try {
@@ -129,13 +90,7 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 		}
 	}
 
-	/**
-	 * the ThreadSafe version of contains method
-	 * 
-	 * @param element
-	 * @param location
-	 * @return true if the element is in the index at the given location
-	 */
+	@Override
 	public boolean contains(String element, String location) {
 		this.lock.readLock().lock();
 		try {
@@ -145,11 +100,7 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 		}
 	}
 
-	/**
-	 * the ThreadSafe version of count method
-	 * 
-	 * @return number of words
-	 */
+	@Override
 	public int count() {
 		this.lock.readLock().lock();
 		try {
@@ -159,12 +110,7 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 		}
 	}
 
-	/**
-	 * the ThreadSafe version of count method
-	 * 
-	 * @param word
-	 * @return number of locations
-	 */
+	@Override
 	public int count(String word) {
 		this.lock.readLock().lock();
 		try {
@@ -174,13 +120,7 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 		}
 	}
 
-	/**
-	 * the ThreadSafe version of count method
-	 * 
-	 * @param word
-	 * @param location
-	 * @return number of positions
-	 */
+	@Override
 	public int count(String word, String location) {
 		this.lock.readLock().lock();
 		try {
@@ -190,23 +130,25 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 		}
 	}
 
-	/**
-	 * A general ThreadSafe version of search method given queries for searching and
-	 * a flag deciding exact search or partial search
-	 * 
-	 * @param queries the query line for searching
-	 * @param exact   a boolean checking if it is exact search or partial search
-	 * @return search the search result
-	 */
-	public ArrayList<SearchResult> search(Collection<String> queries, boolean exact) {
-		this.lock.readLock().lock();
+	@Override
+	public ArrayList<SearchResult> exactSearch(Collection<String> QueryLine) {
+
+		lock.readLock().lock();
 		try {
-			return exact ? exactSearch(queries) : partialSearch(queries);
+			return super.exactSearch(QueryLine);
 		} finally {
-			this.lock.readLock().unlock();
+			lock.readLock().unlock();
 		}
 	}
 
-	// TODO Remove search, add exactSearch and partialSearch
-	
+	@Override
+	public ArrayList<SearchResult> partialSearch(Collection<String> QueryLine) {
+
+		lock.readLock().lock();
+		try {
+			return super.partialSearch(QueryLine);
+		} finally {
+			lock.readLock().unlock();
+		}
+	}
 }
