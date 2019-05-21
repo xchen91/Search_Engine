@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.nio.file.Path;
 
+// TODO Need to fill in all of your Javadoc
+
 /**
  * @author tracyair
  *
@@ -10,7 +12,7 @@ public class ThreadSafeInvertedIndexBuilder extends InvertedIndexBuilder {
 	/**
 	 * 
 	 */
-	private static ThreadSafeInvertedIndex index;
+	private static ThreadSafeInvertedIndex index; // TODO Should not be static
 	/**
 	 * 
 	 */
@@ -32,7 +34,7 @@ public class ThreadSafeInvertedIndexBuilder extends InvertedIndexBuilder {
 	 * @param queue
 	 * @throws IOException
 	 */
-	public void build(Path path) throws IOException {
+	public void build(Path path) throws IOException { // TODO @Override
 		WorkQueue queue = new WorkQueue(this.numThreads);
 		for (Path singlePath : DirectoryTraverser.publicTraverse(path)) {
 			queue.execute(new Task(singlePath));
@@ -45,7 +47,7 @@ public class ThreadSafeInvertedIndexBuilder extends InvertedIndexBuilder {
 	 * @author tracyair
 	 *
 	 */
-	private static class Task implements Runnable {
+	private static class Task implements Runnable { // TODO Make a non-static class
 
 		/**
 		 * 
@@ -64,6 +66,13 @@ public class ThreadSafeInvertedIndexBuilder extends InvertedIndexBuilder {
 		public void run() {
 			try {
 				InvertedIndexBuilder.addFile(this.path, index);
+				
+				/* TODO
+				InvertedIndex local = new InvertedIndex();
+				InvertedIndexBuilder.addFile(this.path, local);
+				index.addAll(local);
+				*/
+				
 			} catch (IOException e) {
 				System.err.println("Unable to add the file to the index: " + this.path.toString());
 			}

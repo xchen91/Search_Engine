@@ -4,6 +4,15 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 
+/*
+ * TODO Warnings in code:
+Javadoc: Parameter index is not declared	InvertedIndexBuilder.java	/Project/src	line 35	Java Problem
+Javadoc: Parameter index is not declared	ThreadSafeInvertedIndexBuilder.java	/Project/src	line 31	Java Problem
+Javadoc: Parameter index is not declared	ThreadSafeInvertedIndexBuilder.java	/Project/src	line 57	Java Problem
+Javadoc: Parameter queue is not declared	ThreadSafeInvertedIndexBuilder.java	/Project/src	line 32	Java Problem
+Javadoc: Parameter queue is not declared	ThreadSafeQueryParser.java	/Project/src	line 41	Java Problem
+ */
+
 /**
  * Class responsible for running this project based on the provided command-line
  * arguments. See the README for details. Project3a test passed!

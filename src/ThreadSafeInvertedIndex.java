@@ -3,23 +3,28 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 
+// TODO Missing numtoJSON
+// TODO Use the @Override annotation for all overridden methods (Eclipse can do this for you)
+
 /**
  * @author tracyair
- *
+ * TODO
  */
 public class ThreadSafeInvertedIndex extends InvertedIndex {
 	/**
-	 * 
+	 * TODO
 	 */
 	private final SimpleReadWriteLock lock;
 
 	/**
-	 * 
+	 * TODO 
 	 */
 	public ThreadSafeInvertedIndex() {
 		super();
 		this.lock = new SimpleReadWriteLock();
 	}
+	
+	// TODO Do not need to Javadoc the @Overridden methods!
 
 	/**
 	 * the ThreadSafe version of toJSON method
@@ -43,7 +48,7 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 	 * @param path the output file path to print JSON file
 	 * @throws IOException
 	 */
-	public void locationsJSON(Path path) throws IOException {
+	public void locationsJSON(Path path) throws IOException { // TODO numtoJSON
 		this.lock.readLock().lock();
 		try {
 			super.numtoJSON(path);
@@ -202,4 +207,6 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 		}
 	}
 
+	// TODO Remove search, add exactSearch and partialSearch
+	
 }
