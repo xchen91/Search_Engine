@@ -63,12 +63,6 @@ public class ThreadSafeQueryParser implements QueryParserInterface {
 		}
 		String joined = String.join(" ", queryLine);
 
-//		synchronized (this.map) {
-//			if (!queryLine.isEmpty() && !map.containsKey(joined)) {
-//				map.put(joined, index.search(queryLine, exact));
-//			}
-//		}
-
 		synchronized (this.map) {
 			if (queryLine.isEmpty() || map.containsKey(joined)) {
 				return;
