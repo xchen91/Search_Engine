@@ -30,9 +30,6 @@ public class ThreadSafeInvertedIndexBuilder extends InvertedIndexBuilder {
 
 	/**
 	 * @param path
-	 * @param index
-	 * @param queue
-	 * @throws IOException
 	 */
 	public void build(Path path) throws IOException { // TODO @Override
 		WorkQueue queue = new WorkQueue(this.numThreads);
@@ -56,7 +53,6 @@ public class ThreadSafeInvertedIndexBuilder extends InvertedIndexBuilder {
 
 		/**
 		 * @param path
-		 * @param index
 		 */
 		public Task(Path path) {
 			this.path = path;
@@ -66,13 +62,12 @@ public class ThreadSafeInvertedIndexBuilder extends InvertedIndexBuilder {
 		public void run() {
 			try {
 				InvertedIndexBuilder.addFile(this.path, index);
-				
-				/* TODO
-				InvertedIndex local = new InvertedIndex();
-				InvertedIndexBuilder.addFile(this.path, local);
-				index.addAll(local);
-				*/
-				
+
+				/*
+				 * TODO InvertedIndex local = new InvertedIndex();
+				 * InvertedIndexBuilder.addFile(this.path, local); index.addAll(local);
+				 */
+
 			} catch (IOException e) {
 				System.err.println("Unable to add the file to the index: " + this.path.toString());
 			}

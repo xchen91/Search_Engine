@@ -33,7 +33,8 @@ public class Driver {
 		Instant start = Instant.now();
 		ArgumentMap map = new ArgumentMap(args);
 		InvertedIndex index;
-		QueryParser query;
+		QueryParserInterface query;
+//		QueryParser query;
 		InvertedIndexBuilder builder;
 		int threads = 0;
 
@@ -44,7 +45,7 @@ public class Driver {
 			} catch (NumberFormatException e) {
 				threads = 5;
 			}
-			if(threads < 1){
+			if (threads < 1) {
 				threads = 5;
 			}
 			index = new ThreadSafeInvertedIndex();

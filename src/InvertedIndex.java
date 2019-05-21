@@ -229,20 +229,35 @@ public class InvertedIndex {
 		return exact ? exactSearch(queries) : partialSearch(queries);
 	}
 
-	/* TODO
+	/**
+	 * A method that add all other InvertedIndex data structures
+	 * 
+	 * @param other InvertedIndexs to add
+	 */
 	public void addAll(InvertedIndex other) {
 		for (String key : other.index.keySet()) {
 			if (this.index.containsKey(key) == false) {
 				this.index.put(key, other.index.get(key));
-			}
-			else {
-				// loop
+			} else {
+				for (String path : other.index.get(key).keySet()) {
+					try {
+						if (this.index.get(key).containsKey(path) && !key.isEmpty()) {
+							this.index.get(key).get(path).addAll(other.index.get(key).get(path));
+						} else {
+							this.index.get(key).put(path, other.index.get(key).get(path));
+						}
+					} catch (NullPointerException e) {
+						System.out.println("Unable to add all other InvertedIndex data structures");
+					}
+				}
 			}
 		}
-		
 		for (String location : other.wordCount.keySet()) {
-			
+			if (this.wordCount.containsKey(location)) {
+				this.wordCount.put(location, this.wordCount.get(location) + other.wordCount.get(location));
+			} else {
+				this.wordCount.put(location, other.wordCount.get(location));
+			}
 		}
 	}
-	*/
 }

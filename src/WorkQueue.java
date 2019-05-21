@@ -27,7 +27,7 @@ public class WorkQueue {
 	public static final int DEFAULT = 5;
 
 	/**
-	 * TODO
+	 * The number of pending work
 	 */
 	private int pending;
 
@@ -67,39 +67,35 @@ public class WorkQueue {
 	 * @param r work request (in the form of a {@link Runnable} object)
 	 */
 	public void execute(Runnable r) {
-		// TODO synchronized (this) { pending++; }
+		synchronized (this) {
+			pending++;
+		}
 		synchronized (queue) {
-			pending++; // TODO Remove
 			queue.addLast(r);
 			queue.notifyAll();
 		}
 	}
 
 	/**
-	 * TODO
+	 * Decreasing the number of pending work
 	 */
-	public void pendingDecrease() { // TODO Make entire method synchronized and PRIVATE
-		synchronized (queue) { // TODO Remove
-			pending--;
-			if (pending <= 0 && queue.isEmpty()) { // TODO only check if pending is 0
-				queue.notifyAll(); // TODO this.notifyAll
-			}
+	private synchronized void pendingDecrease() {
+		pending--;
+		if (pending <= 0) {
+			this.notifyAll();
 		}
 	}
 
 	/**
 	 * Waits for all pending work to be finished.
 	 */
-	public void finish() { // TODO Make entire method synchronized
-		synchronized (this.queue) { // TODO Remove
-			try {
-				while (this.pending > 0) {
-					queue.wait(); // TODO this.wait()
-				}
-				queue.notifyAll(); // TODO Remove
-			} catch (InterruptedException e) {
-				System.err.println("Warning: Work queue encountered an exception while running.");
+	public synchronized void finish() {
+		try {
+			while (this.pending > 0) {
+				this.wait();
 			}
+		} catch (InterruptedException e) {
+			System.err.println("Warning: Finishing encountered an exception while running.");
 		}
 	}
 
