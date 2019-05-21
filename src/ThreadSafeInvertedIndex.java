@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
+ * TODO Need description
  * @author tracyair
  */
 public class ThreadSafeInvertedIndex extends InvertedIndex {

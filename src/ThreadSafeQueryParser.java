@@ -51,6 +51,7 @@ public class ThreadSafeQueryParser implements QueryParserInterface {
 			}
 			queue.finish();
 		}
+		// TODO Missing queue.shutdown()!
 	}
 
 	@Override

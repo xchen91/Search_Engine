@@ -241,12 +241,12 @@ public class InvertedIndex {
 			} else {
 				for (String path : other.index.get(key).keySet()) {
 					try {
-						if (this.index.get(key).containsKey(path) && !key.isEmpty()) {
+						if (this.index.get(key).containsKey(path) && !key.isEmpty()) { // TODO Do not need the !key.isEmpty check
 							this.index.get(key).get(path).addAll(other.index.get(key).get(path));
 						} else {
 							this.index.get(key).put(path, other.index.get(key).get(path));
 						}
-					} catch (NullPointerException e) {
+					} catch (NullPointerException e) { // TODO This should not be necessary if you are looping through other properly.
 						System.out.println("Unable to add all other InvertedIndex data structures");
 					}
 				}

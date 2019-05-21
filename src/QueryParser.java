@@ -37,6 +37,7 @@ public class QueryParser implements QueryParserInterface {
 		this.map = new TreeMap<>();
 	}
 
+	// TODO Remove, just rely on default implementation.
 	@Override
 	public void parse(Path path, boolean exact) throws IOException {
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {

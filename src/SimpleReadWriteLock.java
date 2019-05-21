@@ -121,7 +121,7 @@ public class SimpleReadWriteLock {
 					try {
 						lock.wait();
 					} catch (InterruptedException e) {
-						System.out.println("Warning: Work queue interrupted.");
+						System.out.println("Warning: Work queue interrupted."); // TODO Fix message, this is not the work queue.
 					}
 				}
 				writers++;

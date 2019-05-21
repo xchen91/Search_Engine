@@ -4,6 +4,8 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 
+// TODO No old warnings or TODO comments!
+
 /**
  * Class responsible for running this project based on the provided command-line
  * arguments. See the README for details. Project3a test passed!
@@ -41,6 +43,14 @@ public class Driver {
 			index = new ThreadSafeInvertedIndex();
 			query = new ThreadSafeQueryParser((ThreadSafeInvertedIndex) index, threads);
 			builder = new ThreadSafeInvertedIndexBuilder((ThreadSafeInvertedIndex) index, threads);
+			
+			// TODO Need to avoid downcasting...
+			/*
+			ThreadSafeInvertedIndex threadSafe = new ThreadSafeInvertedIndex();
+			index = threadSafe;
+			query = new ThreadSafeQueryParser(threadSafe, threads);
+			builder = new ThreadSafeInvertedIndexBuilder(threadSafe, threads);
+			 */
 		} else {
 			index = new InvertedIndex();
 			query = new QueryParser(index);
