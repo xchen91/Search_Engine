@@ -14,7 +14,7 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
  * @author tracyair
  *
  */
-public class ThreadSafeQueryParser extends QueryParser {
+public class ThreadSafeQueryParser implements QueryParserInterface {
 
 	/**
 	 * Initial variable InvertedIndex Object
@@ -24,34 +24,24 @@ public class ThreadSafeQueryParser extends QueryParser {
 	 * initial the data structure
 	 */
 	private final TreeMap<String, ArrayList<SearchResult>> map;
-
 	/**
 	 * number of threads
 	 */
 	private int numThreads;
 
 	/**
-	 * This ThreadSafe version of method first makes the query file into every
-	 * single query line, and uses the exactSearch and patialSearch in InvertedIndex
-	 * and finally, puts the query line and result into result data structure of
-	 * this class.
+	 * Class Constructors
 	 * 
 	 * @param index
 	 * @param numThreads
-	 * @param queue
 	 */
 	public ThreadSafeQueryParser(ThreadSafeInvertedIndex index, int numThreads) {
-		super(index);
 		this.index = index;
 		this.map = new TreeMap<>();
 		this.numThreads = numThreads;
 	}
 
-	/**
-	 * @param path
-	 * @param exact
-	 * @throws IOException
-	 */
+	@Override
 	public void parse(Path path, boolean exact) throws IOException {
 		WorkQueue queue = new WorkQueue(numThreads);
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
@@ -63,12 +53,7 @@ public class ThreadSafeQueryParser extends QueryParser {
 		}
 	}
 
-	/**
-	 * ThreadSafe version of parsing the query line and outputing the result
-	 * 
-	 * @param line  query lines
-	 * @param exact a boolean checking if it is exact search or not
-	 */
+	@Override
 	public void parse(String line, boolean exact) {
 		Stemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 		TreeSet<String> queryLine = new TreeSet<>();
@@ -77,19 +62,19 @@ public class ThreadSafeQueryParser extends QueryParser {
 			queryLine.add(newString);
 		}
 		String joined = String.join(" ", queryLine);
+
 		synchronized (this.map) {
-			if (!queryLine.isEmpty() && !map.containsKey(joined)) {
-				map.put(joined, index.search(queryLine, exact));
+			if (queryLine.isEmpty() || map.containsKey(joined)) {
+				return;
 			}
+		}
+		ArrayList<SearchResult> local = index.search(queryLine, exact);
+		synchronized (this.map) {
+			map.put(joined, local);
 		}
 	}
 
-	/**
-	 * a method that prints the search result data structure to the JSON file.
-	 * 
-	 * @param path the path of the JSON file output
-	 * @throws IOException
-	 */
+	@Override
 	public void querytoJSON(Path path) throws IOException {
 		synchronized (this.map) {
 			PrettyJSONWriter.asNestedSearchResult(map, path);

@@ -83,7 +83,7 @@ public class SimpleReadWriteLock {
 					try {
 						lock.wait();
 					} catch (InterruptedException e) {
-						System.out.println("Warning: Work queue interrupted.");
+						System.out.println("Warning: Locking interrupted.");
 					}
 				}
 				readers++;

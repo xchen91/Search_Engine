@@ -138,7 +138,6 @@ public class HtmlCleaner {
 	 * @param base the base url used to convert relative links to absolute3
 	 * @param html the raw html associated with the base url
 	 * @return cleaned list of all http(s) links in the order they were found
-	 * @throws MalformedURLException
 	 */
 	public static ArrayList<URL> listLinks(URL base, String html) {
 
@@ -216,7 +215,6 @@ public class HtmlCleaner {
 	 * @return text without any HTML comments
 	 */
 	public static String stripComments(String html) {
-		// TODO
 		String regex = "(?s)<!--.*?-->";
 		Pattern p = Pattern.compile(regex);
 		Matcher m = p.matcher(html);
@@ -244,7 +242,6 @@ public class HtmlCleaner {
 	 * @return text without that HTML element
 	 */
 	public static String stripElement(String html, String name) {
-		// TODO
 		String regex = "(?s)(?i)<" + name + "(.*?)" + name + "(\\s*?)>";
 		Pattern p = Pattern.compile(regex);
 		Matcher m = p.matcher(html);
@@ -265,12 +262,6 @@ public class HtmlCleaner {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-
-		// URL url = new URL("https://www.cs.usfca.edu/~cs212/simple/hello.html");
-//		URL url = new URL("https://www.cs.usfca.edu/~cs212/birds/birds.html");
-//		HtmlCleaner cleaned = new HtmlCleaner(url);
-//		System.out.println(cleaned.urls);
-//		System.out.println(cleaned.text);
 
 		String input = "My phone is 659 09 and my other phone is 627 80 bye";
 		Pattern pattern = Pattern.compile("[0-9]{3} [0-9]{2}");

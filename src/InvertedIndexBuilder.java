@@ -31,8 +31,7 @@ public class InvertedIndexBuilder {
 	 * Adds every words in all text file in this list of path and the position it
 	 * was found to the inverted index.
 	 * 
-	 * @param path  a path contains words and index
-	 * @param index an inverted index data structure
+	 * @param path a path contains words and index
 	 * @throws IOException
 	 */
 	public void build(Path path) throws IOException {

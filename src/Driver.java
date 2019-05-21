@@ -24,17 +24,16 @@ public class Driver {
 		Instant start = Instant.now();
 		ArgumentMap map = new ArgumentMap(args);
 		InvertedIndex index;
-		QueryParser query;
+		QueryParserInterface query;
 		InvertedIndexBuilder builder;
 		int threads = 0;
-		WebCrawler crawler;
 
 		if (map.hasFlag("-threads")) {
 			String numThreads = map.getString("-threads", "5");
 			try {
 				threads = Integer.parseInt(numThreads);
 			} catch (NumberFormatException e) {
-				threads = 5;
+				System.out.print("NumberFormatException");
 			}
 			if (threads < 1) {
 				threads = 5;
