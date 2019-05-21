@@ -33,7 +33,7 @@ public class Driver {
 			try {
 				threads = Integer.parseInt(numThreads);
 			} catch (NumberFormatException e) {
-				threads = 5;
+				System.out.print("NumberFormatException");
 			}
 			if (threads < 1) {
 				threads = 5;
