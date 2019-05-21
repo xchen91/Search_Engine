@@ -27,6 +27,7 @@ public class Driver {
 		QueryParser query;
 		InvertedIndexBuilder builder;
 		int threads = 0;
+		WebCrawler crawler;
 
 		if (map.hasFlag("-threads")) {
 			String numThreads = map.getString("-threads", "5");
@@ -35,7 +36,7 @@ public class Driver {
 			} catch (NumberFormatException e) {
 				threads = 5;
 			}
-			if(threads < 1){
+			if (threads < 1) {
 				threads = 5;
 			}
 			index = new ThreadSafeInvertedIndex();
@@ -45,6 +46,10 @@ public class Driver {
 			index = new InvertedIndex();
 			query = new QueryParser(index);
 			builder = new InvertedIndexBuilder(index);
+		}
+
+		if (map.hasFlag("-url")) {
+
 		}
 
 		if (map.hasFlag("-path")) {
