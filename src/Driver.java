@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
@@ -27,7 +29,7 @@ public class Driver {
 		QueryParserInterface query;
 		InvertedIndexBuilder builder;
 		int threads = 0;
-
+		WebCrawler crawler;
 		if (map.hasFlag("-threads")) {
 			String numThreads = map.getString("-threads", "5");
 			try {
@@ -46,7 +48,27 @@ public class Driver {
 			query = new QueryParser(index);
 			builder = new InvertedIndexBuilder(index);
 		}
+		if (map.hasFlag("-url")) {
+			String Seed = map.getString("-url");
+			int limit;
+			URL seed = null;
+			try {
+				seed = new URL(Seed);
+				limit = Integer.parseInt(map.getString("-limit", "50"));
+				System.out.println("Limit: " + limit);
+				System.out.println("Limi2t: " + map.getString("-limit"));
+			} catch (MalformedURLException e) {
+				System.err.println("Illegal url: " + Seed + " please check your argument");
+				return;
+			} catch (NumberFormatException e) {
+				System.err.println("Illegal limit number: " + map.getString("-limit"));
+				return;
+			}
+			System.out.print("Limit3: " + limit);
+			crawler = new WebCrawler((ThreadSafeInvertedIndex) index, threads);
+			crawler.crawl(seed, limit);
 
+		}
 		if (map.hasFlag("-path")) {
 			if (map.getPath("-path") != null) {
 				Path filePath = map.getPath("-path");
